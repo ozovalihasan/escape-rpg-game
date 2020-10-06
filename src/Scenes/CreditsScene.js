@@ -6,8 +6,6 @@ export default class CreditsScene extends Phaser.Scene {
     super("Credits");
   }
 
-  preload() {}
-
   create() {
     this.creditsText = this.add.text(0, 0, "Credits", {
       fontsize: "32px",
@@ -35,9 +33,7 @@ export default class CreditsScene extends Phaser.Scene {
       ease: "Power1",
       duration: 3000,
       delay: 1000,
-      onComplete: function () {
-        this.destroy;
-      },
+      onComplete: () => this.destroy,
     });
     this.madeByTween = this.tweens.add({
       targets: this.madeByText,

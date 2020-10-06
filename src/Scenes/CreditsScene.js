@@ -1,4 +1,6 @@
-import "phaser";
+/* eslint-disable no-unused-expressions */
+
+import Phaser from "phaser";
 import config from "../Config/config";
 
 export default class CreditsScene extends Phaser.Scene {
@@ -41,10 +43,12 @@ export default class CreditsScene extends Phaser.Scene {
       ease: "Power1",
       duration: 8000,
       delay: 1000,
-      onComplete: function () {
+      onComplete: () => {
         this.madeByTween.destroy;
         this.scene.start("Title");
-      }.bind(this),
+      },
     });
   }
 }
+
+/* eslint-enable no-unused-expressions */

@@ -8,7 +8,6 @@ export default class TitleScene extends Phaser.Scene {
   }
 
   create() {
-    // Game
     this.gameButton = new Button(
       this,
       config.width / 2,

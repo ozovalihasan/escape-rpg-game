@@ -58,6 +58,38 @@ export default class WorldScene extends Phaser.Scene {
       frameRate: 10,
       repeat: -1,
     });
+
+    this.physics.add.collider(this.player, obstacles);
+
+    this.spawns = this.physics.add.group({
+      classType: Phaser.GameObjects.Zone,
+    });
+    for (var i = 0; i < 30; i++) {
+      var x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
+      var y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
+      // parameters are x, y, width, height
+      this.spawns.create(x, y, 20, 20);
+    }
+    this.physics.add.overlap(
+      this.player,
+      this.spawns,
+      this.onMeetEnemy,
+      false,
+      this
+    );
+  }
+
+  onMeetEnemy(player, zone) {
+    // start battle
+    // we move the zone to some other location
+    zone.x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
+    zone.y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
+
+    // shake the world
+    this.cameras.main.shake(300);
+    // this.cameras.main.fade(300);
+    // this.cameras.main.flash(300);
+    // start battle
   }
 
   update(time, delta) {

@@ -7,6 +7,8 @@ import TitleScene from './Scenes/TitleScene';
 import OptionsScene from './Scenes/OptionsScene';
 import CreditsScene from './Scenes/CreditsScene';
 import WorldScene from './Scenes/WorldScene';
+import BattleScene from './Scenes/BattleScene';
+import UIScene from './Scenes/UIScene';
 import Model from './Model';
 
 class Game extends Phaser.Game {
@@ -18,6 +20,8 @@ class Game extends Phaser.Game {
     this.scene.add('Boot', BootScene);
     this.scene.add('Preloader', PreloaderScene);
     this.scene.add('World', WorldScene);
+    this.scene.add('Battle', BattleScene);
+    this.scene.add('UI', UIScene);
     this.scene.add('Title', TitleScene);
     this.scene.add('Options', OptionsScene);
     this.scene.add('Credits', CreditsScene);

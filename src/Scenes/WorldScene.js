@@ -4,24 +4,19 @@ export default class WorldScene extends Phaser.Scene {
   constructor() {
     super('World');
   }
-  init() {}
-  preload() {}
   create() {
+    // create the map
     var map = this.make.tilemap({ key: 'map' });
+
+    // first parameter is the name of the tilemap in tiled
     var tiles = map.addTilesetImage('spritesheet', 'tiles');
 
+    // creating the layers
     var grass = map.createStaticLayer('Grass', tiles, 0, 0);
     var obstacles = map.createStaticLayer('Obstacles', tiles, 0, 0);
-    obstacles.setCollisionByExclusion([-1]);
-    this.player = this.physics.add.sprite(50, 100, 'player', 6);
-    this.physics.world.bounds.width = map.widthInPixels;
-    this.physics.world.bounds.height = map.heightInPixels;
-    this.player.setCollideWorldBounds(true);
-    this.cursors = this.input.keyboard.createCursorKeys();
 
-    this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-    this.cameras.main.startFollow(this.player);
-    this.cameras.main.roundPixels = true;
+    // make all tiles in obstacles collidable
+    obstacles.setCollisionByExclusion([-1]);
 
     //  animation with key 'left', we don't need left and right as we will use one and flip the sprite
     this.anims.create({
@@ -59,8 +54,26 @@ export default class WorldScene extends Phaser.Scene {
       repeat: -1,
     });
 
+    // our player sprite created through the phycis system
+    this.player = this.physics.add.sprite(50, 100, 'player', 6);
+
+    // don't go out of the map
+    this.physics.world.bounds.width = map.widthInPixels;
+    this.physics.world.bounds.height = map.heightInPixels;
+    this.player.setCollideWorldBounds(true);
+
+    // don't walk on trees
     this.physics.add.collider(this.player, obstacles);
 
+    // limit camera to map
+    this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    this.cameras.main.startFollow(this.player);
+    this.cameras.main.roundPixels = true; // avoid tile bleed
+
+    // user input
+    this.cursors = this.input.keyboard.createCursorKeys();
+
+    // where the enemies will be
     this.spawns = this.physics.add.group({
       classType: Phaser.GameObjects.Zone,
     });
@@ -70,6 +83,7 @@ export default class WorldScene extends Phaser.Scene {
       // parameters are x, y, width, height
       this.spawns.create(x, y, 20, 20);
     }
+    // add collider
     this.physics.add.overlap(
       this.player,
       this.spawns,
@@ -77,19 +91,28 @@ export default class WorldScene extends Phaser.Scene {
       false,
       this
     );
+    // we listen for 'wake' event
+    this.sys.events.on('wake', this.wake, this);
+  }
+
+  wake() {
+    this.cursors.left.reset();
+    this.cursors.right.reset();
+    this.cursors.up.reset();
+    this.cursors.down.reset();
   }
 
   onMeetEnemy(player, zone) {
-    // start battle
     // we move the zone to some other location
     zone.x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
     zone.y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
 
     // shake the world
     this.cameras.main.shake(300);
-    // this.cameras.main.fade(300);
-    // this.cameras.main.flash(300);
+
+    this.input.stopPropagation();
     // start battle
+    this.scene.switch('Battle');
   }
 
   update(time, delta) {
@@ -101,7 +124,6 @@ export default class WorldScene extends Phaser.Scene {
     } else if (this.cursors.right.isDown) {
       this.player.body.setVelocityX(80);
     }
-
     // Vertical movement
     if (this.cursors.up.isDown) {
       this.player.body.setVelocityY(-80);
@@ -109,10 +131,13 @@ export default class WorldScene extends Phaser.Scene {
       this.player.body.setVelocityY(80);
     }
 
+    // Update the animation last and give left/right animations precedence over up/down animations
     if (this.cursors.left.isDown) {
       this.player.anims.play('left', true);
+      this.player.flipX = true;
     } else if (this.cursors.right.isDown) {
       this.player.anims.play('right', true);
+      this.player.flipX = false;
     } else if (this.cursors.up.isDown) {
       this.player.anims.play('up', true);
     } else if (this.cursors.down.isDown) {

@@ -84,6 +84,9 @@ export default class PreloaderScene extends Phaser.Scene {
       frameWidth: 16,
       frameHeight: 16,
     });
+
+    this.load.image('dragonblue', 'assets/dragonblue.png');
+    this.load.image('dragonorange', 'assets/dragonorange.png');
   }
 
   ready() {

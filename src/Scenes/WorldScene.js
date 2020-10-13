@@ -1,4 +1,9 @@
 import Phaser from 'phaser';
+import TakeVehicle from '../Objects/TakeVehicle';
+import config from '../Config/config';
+import Button from '../Objects/Button';
+import ActionButton from '../Objects/ActionButton';
+import OperationsAPI from '../Message/OperationsAPI';
 
 export default class WorldScene extends Phaser.Scene {
   constructor() {

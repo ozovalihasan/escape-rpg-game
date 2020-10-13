@@ -45,6 +45,11 @@ export default class WorldScene extends Phaser.Scene {
       })
       .setScrollFactor(0);
 
+    this.marine = this.physics.add.sprite(410, 250, 'marine', 1);
+    this.marine.setScale(0.5);
+
+    this.boat = this.physics.add.sprite(60, 160, 'boat', 0);
+    this.boat.setScale(0.8);
     //  animation with key 'left', we don't need left and right as we will use one and flip the sprite
     this.anims.create({
       key: 'left',

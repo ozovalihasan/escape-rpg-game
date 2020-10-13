@@ -82,14 +82,86 @@ export default class UIScene extends Phaser.Scene {
     this.events.on('Enemy', this.onEnemy, this);
 
     // when the scene receives wake event
-    this.sys.events.on('wake', this.createMenu, this);
+    this.sys.events.on('wake', this.afterWake, this);
 
     // the message describing the current action
     this.message = new Message(this, this.battle.events);
     this.add.existing(this.message);
 
     this.createMenu();
+    this.addHealthBars();
   }
+
+  afterWake() {
+    this.createMenu();
+    this.addHealthBars();
+  }
+
+  addHealthBars() {
+    this.healthBar = {
+      warrior: { unit: this.battle.heroes[0] },
+      bluedragon: { unit: this.battle.enemies[0] },
+    };
+    this.healthBar.warrior.bar = this.makeBar(190, 0, 0x2ecc71);
+    this.healthBar.warrior.text = this.add.text(
+      290,
+      7,
+      this.battle.heroes[0].hp,
+      { fill: '#0f0' }
+    );
+    this.healthBar.bluedragon.bar = this.makeBar(30, 0, 0x2ecc71);
+    this.healthBar.bluedragon.text = this.add.text(
+      0,
+      7,
+      this.battle.enemies[0].hp,
+      { fill: '#0f0' }
+    );
+    this.updateBars();
+    console.log(this.healthBar);
+
+    this.battle.events.on('UpdateHealthBars', this.updateBars, this);
+    this.battle.events.on('DeleteHealthBars', this.deleteBars, this);
+  }
+
+  makeBar(x, y, color) {
+    //draw the bar
+    const bar = this.add.graphics();
+    const barBack = this.add.graphics();
+    //color the bar
+    bar.fillStyle(color, 1);
+    barBack.fillStyle(color, 0.5);
+
+    //fill the bar with a rectangle
+    bar.fillRect(0, 10, 100, 15);
+    barBack.fillRect(0, 10, 100, 15);
+
+    //position the bar
+    bar.x = x;
+    bar.y = y;
+    barBack.x = x;
+    barBack.y = y;
+
+    //return the bar
+    return [bar, barBack];
+  }
+  setValue(unit) {
+    //scale the bar
+    unit.bar[0].scaleX = unit.unit.hp / unit.unit.maxHp;
+  }
+
+  updateBars() {
+    for (const oneBar in this.healthBar) {
+      this.setValue(this.healthBar[oneBar]);
+    }
+  }
+
+  deleteBars() {
+    for (const oneBar in this.healthBar) {
+      this.healthBar[oneBar].bar[0].destroy();
+      this.healthBar[oneBar].bar[1].destroy();
+    }
+  }
+
   createMenu() {
     // map hero menu items to heroes
     this.remapHeroes();

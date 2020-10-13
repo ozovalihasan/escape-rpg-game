@@ -93,6 +93,8 @@ export default class BattleScene extends Phaser.Scene {
       // call the enemy's attack function
       this.units[this.index].attack(this.heroes[r]);
       // add timer for the next turn, so will have smooth gameplay
+      this.events.emit('UpdateHealthBars');
+
       this.time.addEvent({
         delay: 3000,
         callback: this.nextTurn,
@@ -119,6 +121,8 @@ export default class BattleScene extends Phaser.Scene {
     if (action == 'attack') {
       this.units[this.index].attack(this.enemies[target]);
     }
+    this.events.emit('UpdateHealthBars');
+
     // next turn in 3 seconds
     this.time.addEvent({
       delay: 3000,
@@ -128,13 +132,7 @@ export default class BattleScene extends Phaser.Scene {
   }
   endBattle() {
     // clear state, remove sprites
-    this.heroes.length = 0;
-    this.enemies.length = 0;
-    for (var i = 0; i < this.units.length; i++) {
-      // link item
-      this.units[i].destroy();
-    }
-    this.units.length = 0;
+    this.events.emit('DeleteHealthBars');
     // sleep the UI
     this.scene.sleep('UIScene');
     // return to WorldScene and sleep current BattleScene

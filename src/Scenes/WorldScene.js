@@ -85,7 +85,6 @@ export default class WorldScene extends Phaser.Scene {
       repeat: -1,
     });
     this.marine.anims.play('marine', true);
-    //
     this.anims.create({
       key: 'boat',
       frames: this.anims.generateFrameNumbers('boat', {
@@ -140,16 +139,10 @@ export default class WorldScene extends Phaser.Scene {
       repeat: -1,
     });
 
-    // our player sprite created through the phycis system
-    this.player = this.physics.add.sprite(50, 100, 'player', 6);
-
     // don't go out of the map
     this.physics.world.bounds.width = map.widthInPixels;
     this.physics.world.bounds.height = map.heightInPixels;
     this.player.setCollideWorldBounds(true);
-
-    // don't walk on trees
-    this.physics.add.collider(this.player, obstacles);
 
     // limit camera to map
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);

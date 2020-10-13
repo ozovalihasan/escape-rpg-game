@@ -51,6 +51,16 @@ export default class WorldScene extends Phaser.Scene {
     this.boat = this.physics.add.sprite(60, 160, 'boat', 0);
     this.boat.setScale(0.8);
     this.anims.create({
+      key: 'marine',
+      frames: this.anims.generateFrameNumbers('marine', {
+        frames: [1, 2, 3, 4],
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+    this.marine.anims.play('marine', true);
+    //
+    this.anims.create({
       key: 'boat',
       frames: this.anims.generateFrameNumbers('boat', {
         frames: [0, 1, 2, 3],

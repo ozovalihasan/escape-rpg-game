@@ -72,7 +72,8 @@ export default class WorldScene extends Phaser.Scene {
 
     // user input
     this.cursors = this.input.keyboard.createCursorKeys();
-
+    // this.cursors.addKey('ESC');
+    this.cursors.esc = this.input.keyboard.addKey('ESC');
     // where the enemies will be
     this.spawns = this.physics.add.group({
       classType: Phaser.GameObjects.Zone,
@@ -91,10 +92,36 @@ export default class WorldScene extends Phaser.Scene {
       false,
       this
     );
+
+    this.titleButton = new ActionButton(
+      this,
+      config.width / 2,
+      config.height / 2 - 100,
+      'blueButton1',
+      'blueButton2',
+      'Menu',
+      async () => {
+        OperationsAPI.update(
+          this.sys.game.globals.username,
+          this.player.score
+        ).then(() => {
+          this.scene.start('Score');
+        });
+      }
+    );
+    this.titleButton.visible = false;
+
     // we listen for 'wake' event
     this.sys.events.on('wake', this.wake, this);
   }
 
+  visibleToggle(element) {
+    if (element.visible === true) {
+      element.visible = false;
+    } else {
+      element.visible = true;
+    }
+  }
   wake() {
     this.cursors.left.reset();
     this.cursors.right.reset();
@@ -131,6 +158,10 @@ export default class WorldScene extends Phaser.Scene {
       this.player.body.setVelocityY(80);
     }
 
+    if (this.cursors.esc.isDown) {
+      this.visibleToggle(this.titleButton);
+      this.cursors.esc.isDown = false
+    }
     // Update the animation last and give left/right animations precedence over up/down animations
     if (this.cursors.left.isDown) {
       this.player.anims.play('left', true);

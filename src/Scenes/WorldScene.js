@@ -50,6 +50,19 @@ export default class WorldScene extends Phaser.Scene {
 
     this.boat = this.physics.add.sprite(60, 160, 'boat', 0);
     this.boat.setScale(0.8);
+    this.player.collider = {};
+    this.player.collider = {
+      obstacles: this.physics.add.collider(this.player, obstacles),
+      river: this.physics.add.collider(this.player, river),
+      lake: this.physics.add.collider(this.player, lake),
+      sea: this.physics.add.collider(this.player, sea),
+      land: this.physics.add.collider(this.player, land),
+      grass: this.physics.add.collider(this.player, grass),
+      shore: this.physics.add.collider(this.player, shore),
+    };
+
+    this.player.collider.grass.active = false;
+    this.player.collider.shore.active = false;
     this.anims.create({
       key: 'marine',
       frames: this.anims.generateFrameNumbers('marine', {

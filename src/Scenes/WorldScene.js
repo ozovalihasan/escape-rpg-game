@@ -375,21 +375,42 @@ export default class WorldScene extends Phaser.Scene {
 
     if (this.cursors.esc.isDown) {
       this.visibleToggle(this.titleButton);
-      this.cursors.esc.isDown = false
+      this.cursors.esc.isDown = false;
     }
     // Update the animation last and give left/right animations precedence over up/down animations
-    if (this.cursors.left.isDown) {
-      this.player.anims.play('left', true);
-      this.player.flipX = true;
-    } else if (this.cursors.right.isDown) {
-      this.player.anims.play('right', true);
-      this.player.flipX = false;
-    } else if (this.cursors.up.isDown) {
-      this.player.anims.play('up', true);
-    } else if (this.cursors.down.isDown) {
-      this.player.anims.play('down', true);
+
+    if (
+      this.player.actionWay === 'boat' ||
+      this.player.actionWay === 'boatWalk'
+    ) {
+      this.boat.x = this.player.x - 1;
+      this.boat.y = this.player.y + 10;
+      this.player.anims.play('boatRight', true);
+      this.boat.anims.play('boat', true);
+
+      if (this.cursors.left.isDown) {
+        this.player.flipX = false;
+        this.boat.flipX = true;
+      } else {
+        this.player.flipX = true;
+        this.boat.flipX = false;
+      }
     } else {
-      this.player.anims.stop();
+      this.boat.anims.stop();
+
+      if (this.cursors.left.isDown) {
+        this.player.anims.play('left', true);
+        this.player.flipX = true;
+      } else if (this.cursors.right.isDown) {
+        this.player.anims.play('right', true);
+        this.player.flipX = false;
+      } else if (this.cursors.up.isDown) {
+        this.player.anims.play('up', true);
+      } else if (this.cursors.down.isDown) {
+        this.player.anims.play('down', true);
+      } else {
+        this.player.anims.stop();
+      }
     }
   }
 }

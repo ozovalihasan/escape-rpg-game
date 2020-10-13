@@ -137,6 +137,10 @@ export default class WorldScene extends Phaser.Scene {
     this.cursors.up.reset();
     this.cursors.down.reset();
   }
+  updateScore(delta) {
+    this.player.score += delta;
+    this.scoreText.setText(this.player.score);
+  }
 
   onMeetEnemy(player, zone) {
     // we move the zone to some other location

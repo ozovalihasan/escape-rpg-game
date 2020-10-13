@@ -35,6 +35,7 @@ export default class WorldScene extends Phaser.Scene {
     shore.setCollisionByExclusion([-1]);
 
     this.player = this.physics.add.sprite(50, 100, 'player', 6);
+    this.player.actionWay = 'walk';
     this.player.score = 0;
 
     this.scoreText = this.add

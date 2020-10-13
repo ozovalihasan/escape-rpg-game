@@ -133,9 +133,11 @@ export default class BattleScene extends Phaser.Scene {
   endBattle() {
     // clear state, remove sprites
     this.events.emit('DeleteHealthBars');
+
     // sleep the UI
-    this.scene.sleep('UIScene');
+    this.scene.sleep('UI');
     // return to WorldScene and sleep current BattleScene
+    this.scene.switch('World');
     this.world = this.scene.get('World');
     this.world.updateScore(10);
   }

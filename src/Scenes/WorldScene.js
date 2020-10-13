@@ -19,9 +19,21 @@ export default class WorldScene extends Phaser.Scene {
     // creating the layers
     var grass = map.createStaticLayer('Grass', tiles, 0, 0);
     var obstacles = map.createStaticLayer('Obstacles', tiles, 0, 0);
+    var river = map.createStaticLayer('River', tiles, 0, 0);
+    var lake = map.createStaticLayer('Lake', tiles, 0, 0);
+    var sea = map.createStaticLayer('Sea', tiles, 0, 0);
+    var land = map.createStaticLayer('Land', tiles, 0, 0);
+    var shore = map.createStaticLayer('Shore', tiles, 0, 0);
 
     // make all tiles in obstacles collidable
+    grass.setCollisionByExclusion([-1]);
     obstacles.setCollisionByExclusion([-1]);
+    river.setCollisionByExclusion([-1]);
+    lake.setCollisionByExclusion([-1]);
+    sea.setCollisionByExclusion([-1]);
+    land.setCollisionByExclusion([-1]);
+    shore.setCollisionByExclusion([-1]);
+
     this.player = this.physics.add.sprite(50, 100, 'player', 6);
     this.player.score = 0;
 

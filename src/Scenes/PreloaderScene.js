@@ -85,12 +85,30 @@ export default class PreloaderScene extends Phaser.Scene {
       frameHeight: 16,
     });
 
+    this.load.spritesheet('marine', 'assets/subMarineAll.png', {
+      frameWidth: 73,
+      frameHeight: 40,
+    });
+    this.load.spritesheet('boat', 'assets/boat.png', {
+      frameWidth: 64,
+      frameHeight: 64,
+    });
+
+    this.load.image('blueButton1', 'assets/ui/blue_button02.png');
+    this.load.image('blueButton2', 'assets/ui/blue_button03.png');
+    this.load.image('phaserLogo', 'assets/logo.png');
+    this.load.image('box', 'assets/ui/grey_box.png');
+    this.load.image('checkedBox', 'assets/ui/blue_boxCheckmark.png');
+    this.load.audio('bgMusic', ['assets/TownTheme.mp3']);
+
     this.load.image('dragonblue', 'assets/dragonblue.png');
     this.load.image('dragonorange', 'assets/dragonorange.png');
+
+    this.load.image('dragonblue1', 'assets/dragonblue.png');
   }
 
   ready() {
-    this.scene.start('World');
+    this.scene.start('Title');
     this.readyCount += 1;
     if (this.readyCount === 2) {
       this.scene.start('Title');

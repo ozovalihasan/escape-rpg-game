@@ -8,6 +8,28 @@ export default class TitleScene extends Phaser.Scene {
   }
 
   create() {
+    this.sys.game.globals.username = 'Guest';
+    this.username = this.add.text(
+      config.width/2,
+      50,
+      `Welcome ${this.sys.game.globals.username}!`,
+      { fill: '#0f0' }
+    ).setOrigin(0.5, 0.5);
+
+    this.changeName = new ActionButton(
+      this,
+      config.width / 2,
+      config.height / 2 - 90,
+      'blueButton1',
+      'blueButton2',
+      'Change Name',
+      () => {
+        const result = prompt('Please enter your name');
+        if (result) {
+          this.username.setText(`Welcome ${result}!`);
+        }
+      }
+    );
     this.gameButton = new Button(
       this,
       config.width / 2,

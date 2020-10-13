@@ -3,9 +3,9 @@ import Phaser from 'phaser';
 export default {
   type: Phaser.AUTO,
   parent: 'content',
-  width: 320,
-  height: 240,
-  zoom: 2,
+  width: 480,
+  height: 360,
+  zoom: 1.5,
   pixelArt: true,
   physics: {
     default: 'arcade',

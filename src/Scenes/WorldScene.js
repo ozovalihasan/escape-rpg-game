@@ -63,6 +63,19 @@ export default class WorldScene extends Phaser.Scene {
 
     this.player.collider.grass.active = false;
     this.player.collider.shore.active = false;
+    this.riverShore = this.physics.add.group({
+      classType: Phaser.GameObjects.Zone,
+    });
+    this.grassShore = this.physics.add.group({
+      classType: Phaser.GameObjects.Zone,
+    });
+
+    this.getBoat({ x: 56, y: 160, width: 48, height: 1, delta: 4 });
+    this.getOffBoat({ x: 56, y: 144, width: 48, height: 1, delta: -4 });
+
+    this.getBoat({ x: 208, y: 16, width: 1, height: 32, delta: -4 });
+    this.getOffBoat({ x: 224, y: 16, width: 1, height: 32, delta: 4 });
+
     this.anims.create({
       key: 'marine',
       frames: this.anims.generateFrameNumbers('marine', {
@@ -217,6 +230,131 @@ export default class WorldScene extends Phaser.Scene {
     this.input.stopPropagation();
     // start battle
     this.scene.switch('Battle');
+  }
+
+  getBoat(zoneShape) {
+    this.riverShore.create(
+      zoneShape.x,
+      zoneShape.y,
+      zoneShape.width,
+      zoneShape.height
+    ).delta = zoneShape.delta;
+
+    this.player.collider.riverShore = this.physics.add.overlap(
+      this.player,
+      this.riverShore,
+      function (body1, body2) {
+        if (this.player.actionWay === 'walk') {
+          this.player.collider.grass.active = true;
+          this.player.actionWay = 'walkBoat';
+          this.vehicleButton = new TakeVehicle(
+            this,
+            config.width / 2,
+            config.width / 2 - 50,
+            'Get boat',
+            () => {
+              this.player.collider.grassShore.active = true;
+              this.player.collider.river.active = false;
+              // this.player.setY(this.player.y + 2);
+              if (body2.height < body2.width) {
+                this.player.setY(this.player.y + body2.delta);
+              } else {
+                this.player.setX(this.player.x + body2.delta);
+              }
+              this.player.actionWay = 'boat';
+              this.vehicleButton.destroy();
+              this.cancelButton.destroy();
+            }
+          );
+          this.cancelButton = new TakeVehicle(
+            this,
+            config.width / 2,
+            config.width / 2 + 50,
+            'Cancel',
+            () => {
+              this.player.collider.riverShore.active = true;
+              this.player.collider.grass.active = false;
+              // this.player.setY(this.player.y - 2);
+              if (body2.height < body2.width) {
+                this.player.setY(this.player.y - body2.delta);
+              } else {
+                this.player.setX(this.player.x - body2.delta);
+              }
+              this.player.actionWay = 'walk';
+              this.vehicleButton.destroy();
+              this.cancelButton.destroy();
+            }
+          );
+        } else {
+          this.player.collider.riverShore.active = false;
+        }
+      },
+      false,
+      this
+    );
+  }
+
+  getOffBoat(zoneShape) {
+    this.grassShore.create(
+      zoneShape.x,
+      zoneShape.y,
+      zoneShape.width,
+      zoneShape.height
+    ).delta = zoneShape.delta;
+
+    this.player.collider.grassShore = this.physics.add.overlap(
+      this.player,
+      this.grassShore,
+      function (body1, body2) {
+        if (this.player.actionWay === 'boat') {
+          this.player.collider.river.active = true;
+          this.player.actionWay = 'boatWalk';
+          this.vehicleButton = new TakeVehicle(
+            this,
+            config.width / 2,
+            config.width / 2 - 50,
+            'Get off boat',
+            () => {
+              this.player.collider.riverShore.active = true;
+              this.player.collider.grass.active = false;
+              if (body2.height < body2.width) {
+                this.player.setY(this.player.y + body2.delta);
+              } else {
+                this.player.setX(this.player.x + body2.delta);
+              }
+              this.player.actionWay = 'walk';
+              this.vehicleButton.destroy();
+              this.cancelButton.destroy();
+            }
+          );
+          this.cancelButton = new TakeVehicle(
+            this,
+            config.width / 2,
+            config.width / 2 + 50,
+            'Cancel',
+            () => {
+              this.player.collider.grassShore.active = true;
+              this.player.collider.river.active = false;
+              this.player.setY(this.player.y + 2);
+              if (body2.height < body2.width) {
+                this.player.setY(this.player.y - body2.delta);
+              } else {
+                this.player.setX(this.player.x - body2.delta);
+              }
+              this.player.actionWay = 'boat';
+              this.vehicleButton.destroy();
+              this.cancelButton.destroy();
+            }
+          );
+        } else {
+          this.player.collider.grassShore.active = false;
+        }
+      },
+      false,
+      this
+    );
+
+    this.player.collider.grassShore.active = false;
   }
 
   update(time, delta) {

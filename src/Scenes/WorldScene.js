@@ -17,6 +17,15 @@ export default class WorldScene extends Phaser.Scene {
 
     // make all tiles in obstacles collidable
     obstacles.setCollisionByExclusion([-1]);
+    this.player = this.physics.add.sprite(50, 100, 'player', 6);
+    this.player.score = 0;
+
+    this.scoreText = this.add
+      .text(10, 10, this.player.score, {
+        fontsize: '32px',
+        fill: '#fff',
+      })
+      .setScrollFactor(0);
 
     //  animation with key 'left', we don't need left and right as we will use one and flip the sprite
     this.anims.create({

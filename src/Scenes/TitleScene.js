@@ -12,7 +12,7 @@ export default class TitleScene extends Phaser.Scene {
     this.sys.game.globals.username = 'Guest';
     this.username = this.add.text(
       config.width/2,
-      50,
+      config.height /7,
       `Welcome ${this.sys.game.globals.username}!`,
       { fill: '#0f0' }
     ).setOrigin(0.5, 0.5);
@@ -34,7 +34,7 @@ export default class TitleScene extends Phaser.Scene {
     this.gameButton = new Button(
       this,
       config.width / 2,
-      config.height / 2 - 20,
+      config.height* 3/ 7,
       'blueButton1',
       'blueButton2',
       'Play',
@@ -43,7 +43,7 @@ export default class TitleScene extends Phaser.Scene {
     this.optionsButton = new Button(
       this,
       config.width / 2,
-      config.height / 2 + 40,
+      config.height * 4/ 7,
       'blueButton1',
       'blueButton2',
       'Options',
@@ -53,7 +53,7 @@ export default class TitleScene extends Phaser.Scene {
     this.scoreButton = new Button(
       this,
       config.width / 2,
-      config.height / 2 + 100,
+      config.height * 5/ 7,
       'blueButton1',
       'blueButton2',
       'Score Board',
@@ -62,7 +62,7 @@ export default class TitleScene extends Phaser.Scene {
     this.creditsButton = new Button(
       this,
       config.width / 2,
-      config.height / 2 + 160,
+      config.height * 6/ 7,
       'blueButton1',
       'blueButton2',
       'Credits',

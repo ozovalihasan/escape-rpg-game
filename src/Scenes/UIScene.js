@@ -152,6 +152,7 @@ export default class UIScene extends Phaser.Scene {
   updateBars() {
     for (const oneBar in this.healthBar) {
       this.setValue(this.healthBar[oneBar]);
+      this.healthBar[oneBar].text.setText(this.healthBar[oneBar].unit.hp);
     }
   }
 

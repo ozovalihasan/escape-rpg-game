@@ -27,6 +27,7 @@ export default class TitleScene extends Phaser.Scene {
       () => {
         const result = prompt('Please enter your name');
         if (result) {
+          this.sys.game.globals.username = result;
           this.username.setText(`Welcome ${result}!`);
         }
       }

@@ -252,61 +252,40 @@ export default class WorldScene extends Phaser.Scene {
     this.scene.switch('Battle');
   }
 
-  getBoat(zoneShape) {
-    this.riverShore.create(
+  getVehicle(zoneShape) {
+    this.waterShore.create(
       zoneShape.x,
       zoneShape.y,
       zoneShape.width,
       zoneShape.height
-    ).delta = zoneShape.delta;
+    ).delta = [zoneShape.direction, zoneShape.delta, zoneShape.vehicle];
 
-    this.player.collider.riverShore = this.physics.add.overlap(
+    this.player.collider.waterShore = this.physics.add.overlap(
       this.player,
-      this.riverShore,
-      function (body1, body2) {
+      this.waterShore,
+      (body1, body2) => {
         if (this.player.actionWay === 'walk') {
           this.player.collider.grass.active = true;
-          this.player.actionWay = 'walkBoat';
+          this.player.actionWay = '';
           this.vehicleButton = new TakeVehicle(
             this,
-            config.width / 2,
-            config.width / 2 - 50,
-            'Get boat',
             () => {
               this.player.collider.grassShore.active = true;
-              this.player.collider.river.active = false;
-              // this.player.setY(this.player.y + 2);
-              if (body2.height < body2.width) {
-                this.player.setY(this.player.y + body2.delta);
-              } else {
-                this.player.setX(this.player.x + body2.delta);
-              }
-              this.player.actionWay = 'boat';
-              this.vehicleButton.destroy();
-              this.cancelButton.destroy();
-            }
+              this.player.collider.water.active = false;
+              this.player[body2.delta[0]] += body2.delta[1];
+              this.player.actionWay = body2.delta[2];
+            },
+            `Get ${body2.delta[2]}`
           );
-          this.cancelButton = new TakeVehicle(
-            this,
-            config.width / 2,
-            config.width / 2 + 50,
-            'Cancel',
-            () => {
-              this.player.collider.riverShore.active = true;
-              this.player.collider.grass.active = false;
-              // this.player.setY(this.player.y - 2);
-              if (body2.height < body2.width) {
-                this.player.setY(this.player.y - body2.delta);
-              } else {
-                this.player.setX(this.player.x - body2.delta);
-              }
-              this.player.actionWay = 'walk';
-              this.vehicleButton.destroy();
-              this.cancelButton.destroy();
-            }
-          );
+
+          this.cancelButton = new TakeVehicle(this, () => {
+            this.player.collider.waterShore.active = true;
+            this.player.collider.grass.active = false;
+            this.player[body2.delta[0]] -= body2.delta[1];
+            this.player.actionWay = 'walk';
+          });
         } else {
-          this.player.collider.riverShore.active = false;
+          this.player.collider.waterShore.active = false;
         }
       },
       false,
@@ -314,58 +293,38 @@ export default class WorldScene extends Phaser.Scene {
     );
   }
 
-  getOffBoat(zoneShape) {
+  getOffVehicle(zoneShape) {
     this.grassShore.create(
       zoneShape.x,
       zoneShape.y,
       zoneShape.width,
       zoneShape.height
-    ).delta = zoneShape.delta;
+    ).delta = [zoneShape.direction, zoneShape.delta, zoneShape.vehicle];
 
     this.player.collider.grassShore = this.physics.add.overlap(
       this.player,
       this.grassShore,
-      function (body1, body2) {
-        if (this.player.actionWay === 'boat') {
-          this.player.collider.river.active = true;
-          this.player.actionWay = 'boatWalk';
+      (body1, body2) => {
+        if (this.player.actionWay === body2.delta[2]) {
+          this.player.collider.water.active = true;
+          this.player.actionWay = '';
           this.vehicleButton = new TakeVehicle(
             this,
-            config.width / 2,
-            config.width / 2 - 50,
-            'Get off boat',
             () => {
-              this.player.collider.riverShore.active = true;
+              this.player.collider.waterShore.active = true;
               this.player.collider.grass.active = false;
-              if (body2.height < body2.width) {
-                this.player.setY(this.player.y + body2.delta);
-              } else {
-                this.player.setX(this.player.x + body2.delta);
-              }
+              this.player[body2.delta[0]] += body2.delta[1];
               this.player.actionWay = 'walk';
-              this.vehicleButton.destroy();
-              this.cancelButton.destroy();
-            }
+            },
+            `Get off ${body2.delta[2]}`
           );
-          this.cancelButton = new TakeVehicle(
-            this,
-            config.width / 2,
-            config.width / 2 + 50,
-            'Cancel',
-            () => {
-              this.player.collider.grassShore.active = true;
-              this.player.collider.river.active = false;
-              this.player.setY(this.player.y + 2);
-              if (body2.height < body2.width) {
-                this.player.setY(this.player.y - body2.delta);
-              } else {
-                this.player.setX(this.player.x - body2.delta);
-              }
-              this.player.actionWay = 'boat';
-              this.vehicleButton.destroy();
-              this.cancelButton.destroy();
-            }
-          );
+
+          this.cancelButton = new TakeVehicle(this, () => {
+            this.player.collider.grassShore.active = true;
+            this.player.collider.water.active = false;
+            this.player[body2.delta[0]] -= body2.delta[1];
+            this.player.actionWay = body2.delta[2];
+          });
         } else {
           this.player.collider.grassShore.active = false;
         }
@@ -377,7 +336,11 @@ export default class WorldScene extends Phaser.Scene {
     this.player.collider.grassShore.active = false;
   }
 
-  update(time, delta) {
+  destroyVehicleButtons() {
+    this.vehicleButton.destroy();
+    this.cancelButton.destroy();
+  }
+
     this.player.body.setVelocity(0);
 
     // Horizontal movement

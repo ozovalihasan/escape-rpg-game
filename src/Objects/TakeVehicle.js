@@ -1,11 +1,16 @@
 import Phaser from 'phaser';
+import config from '../Config/config';
 
 export default class TakeVehicle extends Phaser.GameObjects.Container {
-  constructor(scene, x, y, text, callback) {
+  constructor(scene, callback, text = 'Cancel') {
     super(scene);
     this.scene = scene;
-    this.x = x;
-    this.y = y;
+    this.x = config.width / 2;
+    if (text === 'Cancel') {
+      this.y = config.height / 2 + 50;
+    } else {
+      this.y = config.height / 2 - 50;
+    }
 
     this.button = this.scene.add
       .sprite(0, 0, 'blueButton1')
@@ -23,6 +28,7 @@ export default class TakeVehicle extends Phaser.GameObjects.Container {
     this.add(this.text);
     this.button.on('pointerdown', () => {
       callback();
+      this.scene.destroyVehicleButtons();
     });
 
     this.button.on('pointerover', () => {

@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 
 export default class Button extends Phaser.GameObjects.Container {
-  constructor(scene, x, y, key1, key2, text, targetScene) {
+  constructor(scene, x, y, key1, key2, text) {
     super(scene);
     this.scene = scene;
     this.x = x;
@@ -11,20 +11,18 @@ export default class Button extends Phaser.GameObjects.Container {
       .sprite(0, 0, key1)
       .setInteractive()
       .setScrollFactor(0);
+
     this.text = this.scene.add
       .text(0, 0, text, {
         fontSize: '24px',
         fill: '#fff',
       })
-      .setScrollFactor(0);
+      .setScrollFactor(0).setOrigin(0.5, 0.5);
     Phaser.Display.Align.In.Center(this.text, this.button);
 
     this.add(this.button);
     this.add(this.text);
 
-    this.button.on('pointerdown', () => {
-      this.scene.scene.start(targetScene);
-    });
 
     this.button.on('pointerover', () => {
       this.button.setTexture(key2);

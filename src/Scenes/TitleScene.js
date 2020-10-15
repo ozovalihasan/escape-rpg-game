@@ -2,7 +2,7 @@
 
 import Phaser from 'phaser';
 import config from '../Config/config';
-import Button from '../Objects/Button';
+import SceneButton from '../Objects/SceneButton';
 import ActionButton from '../Objects/ActionButton';
 
 export default class TitleScene extends Phaser.Scene {
@@ -34,7 +34,7 @@ export default class TitleScene extends Phaser.Scene {
         }
       },
     );
-    this.gameButton = new Button(
+    this.gameButton = new SceneButton(
       this,
       config.width / 2,
       config.height * (3 / 7),
@@ -43,7 +43,7 @@ export default class TitleScene extends Phaser.Scene {
       'Play',
       'World',
     );
-    this.optionsButton = new Button(
+    this.optionsButton = new SceneButton(
       this,
       config.width / 2,
       config.height * (4 / 7),
@@ -53,7 +53,7 @@ export default class TitleScene extends Phaser.Scene {
       'Options',
     );
 
-    this.scoreButton = new Button(
+    this.scoreButton = new SceneButton(
       this,
       config.width / 2,
       config.height * (5 / 7),
@@ -62,7 +62,7 @@ export default class TitleScene extends Phaser.Scene {
       'Score Board',
       'Score',
     );
-    this.creditsButton = new Button(
+    this.creditsButton = new SceneButton(
       this,
       config.width / 2,
       config.height * (6 / 7),

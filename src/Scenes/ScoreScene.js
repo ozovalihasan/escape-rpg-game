@@ -5,7 +5,7 @@
 import Phaser from 'phaser';
 import config from '../Config/config';
 import OperationsAPI from '../Message/OperationsAPI';
-import Button from '../Objects/Button';
+import SceneButton from '../Objects/SceneButton';
 
 export default class ScoreScene extends Phaser.Scene {
   constructor() {
@@ -50,7 +50,7 @@ export default class ScoreScene extends Phaser.Scene {
         .setOrigin(0.5, 0.5);
     });
 
-    this.menuButton = new Button(
+    this.menuButton = new SceneButton(
       this,
       config.width / 2,
       config.height - 50,

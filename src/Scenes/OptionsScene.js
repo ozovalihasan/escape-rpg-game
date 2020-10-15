@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import Button from '../Objects/Button';
+import SceneButton from '../Objects/SceneButton';
 import config from '../Config/config';
 
 
@@ -36,7 +36,7 @@ export default class OptionsScene extends Phaser.Scene {
       this.updateAudio();
     });
 
-    this.menuButton = new Button(
+    this.menuButton = new SceneButton(
       this,
       config.width / 2,
       config.height * (4 / 5),

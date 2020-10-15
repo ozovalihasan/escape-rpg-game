@@ -2,7 +2,7 @@
 import Phaser from 'phaser';
 import TakeVehicle from '../Objects/TakeVehicle';
 import config from '../Config/config';
-import Button from '../Objects/Button';
+import SceneButton from '../Objects/SceneButton';
 import OperationsAPI from '../Message/OperationsAPI';
 
 export default class WorldScene extends Phaser.Scene {
@@ -227,7 +227,7 @@ export default class WorldScene extends Phaser.Scene {
       this,
     );
 
-    this.titleButton = new Button(
+    this.titleButton = new SceneButton(
       this,
       config.width / 2,
       config.height / 2 - 100,

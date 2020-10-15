@@ -354,33 +354,33 @@ export default class WorldScene extends Phaser.Scene {
       this.waterShore,
       (body1, body2) => {
         if (this.player.actionWay === 'walk') {
-          this.player.collider.grass.active = true;
+          this.activeCollider('grass', 'water');
           this.player.actionWay = '';
           this.vehicleButton = new TakeVehicle(
             this,
             () => {
-              this.player.collider.grassShore.active = true;
-              this.player.collider.water.active = false;
+              this.activeCollider('grassShore', 'grass');
               this.player[body2.delta[0]] += body2.delta[1];
               this.player.actionWay = body2.delta[2];
             },
             `Get ${body2.delta[2]}`,
           );
 
-          this.cancelButton = new TakeVehicle(this, () => {
-            this.player.collider.waterShore.active = true;
-            this.player.collider.grass.active = false;
-            this.player[body2.delta[0]] -= body2.delta[1];
-            this.player.actionWay = 'walk';
-          });
-        } else {
-          this.player.collider.waterShore.active = false;
+          this.cancelButton = new TakeVehicle(
+            this,
+            () => {
+              this.activeCollider('waterShore', 'water');
+              this.player[body2.delta[0]] -= body2.delta[1];
+              this.player.actionWay = 'walk';
+            },
+          );
         }
       },
       false,
       this,
     );
   }
+
 
   getOffVehicle(zoneShape) {
     this.grassShore.create(
@@ -395,13 +395,12 @@ export default class WorldScene extends Phaser.Scene {
       this.grassShore,
       (body1, body2) => {
         if (this.player.actionWay === body2.delta[2]) {
-          this.player.collider.water.active = true;
+          this.activeCollider('grass', 'water');
           this.player.actionWay = '';
           this.vehicleButton = new TakeVehicle(
             this,
             () => {
-              this.player.collider.waterShore.active = true;
-              this.player.collider.grass.active = false;
+              this.activeCollider('waterShore', 'water');
               this.player[body2.delta[0]] += body2.delta[1];
               this.player.actionWay = 'walk';
             },
@@ -409,13 +408,10 @@ export default class WorldScene extends Phaser.Scene {
           );
 
           this.cancelButton = new TakeVehicle(this, () => {
-            this.player.collider.grassShore.active = true;
-            this.player.collider.water.active = false;
+            this.activeCollider('grassShore', 'grass');
             this.player[body2.delta[0]] -= body2.delta[1];
             this.player.actionWay = body2.delta[2];
           });
-        } else {
-          this.player.collider.grassShore.active = false;
         }
       },
       false,
@@ -423,6 +419,16 @@ export default class WorldScene extends Phaser.Scene {
     );
 
     this.player.collider.grassShore.active = false;
+  }
+
+  activeCollider(...args) {
+    Object.keys(this.player.collider).forEach((oneCollider) => {
+      if (args.includes(oneCollider) || oneCollider === 'obstacles') {
+        this.player.collider[oneCollider].active = true;
+      } else {
+        this.player.collider[oneCollider].active = false;
+      }
+    });
   }
 
   destroyVehicleButtons() {

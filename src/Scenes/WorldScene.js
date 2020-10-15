@@ -13,15 +13,12 @@ export default class WorldScene extends Phaser.Scene {
   create() {
     const map = this.make.tilemap({ key: 'map' });
 
-
     const tiles = map.addTilesetImage('spritesheet', 'tiles');
-
 
     const grass = map.createStaticLayer('Grass', tiles, 0, 0);
     const obstacles = map.createStaticLayer('Obstacles', tiles, 0, 0);
     const water = map.createStaticLayer('Water', tiles, 0, 0);
     const shore = map.createStaticLayer('Shore', tiles, 0, 0);
-
 
     grass.setCollisionByExclusion([-1]);
     obstacles.setCollisionByExclusion([-1]);
@@ -55,7 +52,7 @@ export default class WorldScene extends Phaser.Scene {
 
     this.player.collider.grass.active = false;
     this.player.collider.shore.active = false;
-    this.riverShore = this.physics.add.group({
+    this.waterShore = this.physics.add.group({
       classType: Phaser.GameObjects.Zone,
     });
     this.grassShore = this.physics.add.group({
@@ -101,14 +98,15 @@ export default class WorldScene extends Phaser.Scene {
     });
 
     this.anims.create({
-      key: 'marine',
-      frames: this.anims.generateFrameNumbers('marine', {
+      key: 'submarine',
+      frames: this.anims.generateFrameNumbers('submarine', {
         frames: [1, 2, 3, 4],
       }),
       frameRate: 10,
       repeat: -1,
     });
-    this.marine.anims.play('marine', true);
+    this.submarine.anims.play('submarine', true);
+
     this.anims.create({
       key: 'boat',
       frames: this.anims.generateFrameNumbers('boat', {

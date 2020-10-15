@@ -439,18 +439,16 @@ export default class WorldScene extends Phaser.Scene {
   update() {
     this.player.body.setVelocity(0);
 
-    if (this.player.actionWay) {
-      if (this.cursors.left.isDown) {
-        this.player.body.setVelocityX(-80);
-      } else if (this.cursors.right.isDown) {
-        this.player.body.setVelocityX(80);
-      }
+    if (this.cursors.left.isDown) {
+      this.player.body.setVelocityX(-80);
+    } else if (this.cursors.right.isDown) {
+      this.player.body.setVelocityX(80);
+    }
 
-      if (this.cursors.up.isDown) {
-        this.player.body.setVelocityY(-80);
-      } else if (this.cursors.down.isDown) {
-        this.player.body.setVelocityY(80);
-      }
+    if (this.cursors.up.isDown) {
+      this.player.body.setVelocityY(-80);
+    } else if (this.cursors.down.isDown) {
+      this.player.body.setVelocityY(80);
     }
 
     if (this.cursors.esc.isDown) {

@@ -19,10 +19,11 @@ export default class Unit extends Phaser.GameObjects.Sprite {
 
   attack(target) {
     if (target.living) {
-      target.takeDamage(this.damage());
+      const damage = this.damage();
+      target.takeDamage(damage);
       this.scene.events.emit(
         'Message',
-        `${this.type} attacks ${target.type} for ${damage} damage`
+        `${this.type} attacks ${target.type} for ${damage} damage`,
       );
     }
   }

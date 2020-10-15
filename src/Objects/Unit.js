@@ -4,29 +4,25 @@ export default class Unit extends Phaser.GameObjects.Sprite {
   constructor(scene, x, y, texture, frame, type, hp, damage) {
     super(scene, x, y, texture, frame, type, hp, damage);
     this.type = type;
-    this.maxHp = this.hp = hp;
-    this.damage = damage; // default damage
+
+    this.hp = Phaser.Math.RND.between(hp[0], hp[1]);
+    this.maxHp = this.hp;
+    this.damage = () => Phaser.Math.RND.between(damage[0], damage[1]);
     this.living = true;
     this.menuItem = null;
+    this.setScale(2);
   }
 
-  // we will use this to notify the menu item when the unit is dead
   setMenuItem(item) {
     this.menuItem = item;
   }
 
-  // attack the target unit
   attack(target) {
     if (target.living) {
-      target.takeDamage(this.damage);
+      target.takeDamage(this.damage());
       this.scene.events.emit(
         'Message',
-        this.type +
-          ' attacks ' +
-          target.type +
-          ' for ' +
-          this.damage +
-          ' damage'
+        `${this.type} attacks ${target.type} for ${damage} damage`
       );
     }
   }

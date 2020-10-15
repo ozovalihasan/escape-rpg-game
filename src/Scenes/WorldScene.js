@@ -327,7 +327,7 @@ export default class WorldScene extends Phaser.Scene {
         this.player.enemy.addDamage[1],
       ),
     );
-    if (this.bigBoss.getLength === 1) {
+    if (this.bigBoss.getLength() === 1) {
       this.addSubmarine();
     }
   }

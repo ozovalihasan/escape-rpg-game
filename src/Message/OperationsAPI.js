@@ -11,11 +11,11 @@ const OperationsAPI = ()=> {
         },
         mode: 'cors',
         body: JSON.stringify({
-          user: user,
-          score: score,
+          score,
         }),
-      }
-    ).then(()=> {return Promies.resolve});
+      },
+    );
+  }
 
   }
 

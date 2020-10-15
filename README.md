@@ -1,55 +1,149 @@
-# Phaser 3 Webpack Project Template
+# 👟 Escape - RPG Game 👟 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/ozovalihasan/weather-app/)
 
-A Phaser 3 project template with ES6 support via [Babel 7](https://babeljs.io/) and [Webpack 4](https://webpack.js.org/)
-that includes hot-reloading for development and production-ready builds.
+[![License](https://img.shields.io/badge/License-MIT-green.svg)]()
+![GitHub followers](https://img.shields.io/github/followers/ozovalihasan?label=ozovalihasan&style=social)
+![Twitter URL](https://img.shields.io/twitter/follow/ozovalihasan?label=Follow&style=social)
 
-Loading images via JavaScript module `import` is also supported.
+> Do you want to escape from the island. It won't be easy
 
-## Requirements
+> Use different vehicles, battle with enemies
 
-[Node.js](https://nodejs.org) is required to install dependencies and run scripts via `npm`.
+## Live Demo
 
-## Available Commands
+[Live Demo Link](https://escape-rpg-game.netlify.app/)
 
-| Command | Description |
-|---------|-------------|
-| `npm install` | Install project dependencies |
-| `npm start` | Build project and open web server running project |
-| `npm run build` | Builds code bundle with production settings (minification, uglification, etc..) |
+![screenshot](assets/screenshot.gif)
 
-## Writing Code
+## Description
 
-After cloning the repo, run `npm install` from your project directory. Then, you can start the local development
-server by running `npm start`.
+This project is part of the Technical Curriculum of the Full Stack Web Development Program.
 
+## Built with
 
-After starting the development server with `npm start`, you can edit any files in the `src` folder
-and webpack will automatically recompile and reload your server (available at `http://localhost:8080`
-by default).
+- JavaScript
+- Phaser
+- Webpack
+- Netlify
+- Jest
+- Tiled
+- Pixelorama
 
-## Customizing Template
+## ⭐ Getting Started ⭐
 
-### Babel
-You can write modern ES6+ JavaScript and Babel will transpile it to a version of JavaScript that you
-want your project to support. The targeted browsers are set in the `.babelrc` file and the default currently
-targets all browsers with total usage over "0.25%" but excludes IE11 and Opera Mini.
+### Prerequisites
 
-  ```
-  "browsers": [
-    ">0.25%",
-    "not ie 11",
-    "not op_mini all"
-  ]
-  ```
+- A modern browser, up to date.
+- Node.js, if you are going to use it in the local environment.
 
-### Webpack
-If you want to customize your build, such as adding a new webpack loader or plugin (i.e. for loading CSS or fonts), you can
-modify the `webpack/base.js` file for cross-project changes, or you can modify and/or create
-new configuration files and target them in specific npm tasks inside of `package.json'.
+### Usage
 
-## Deploying Code
-After you run the `npm run build` command, your code will be built into a single bundle located at 
-`dist/bundle.min.js` along with any other assets you project depended. 
+- Click the [Live Demo Link](https://escape-rpg-game.netlify.app/) and enjoy the game.
 
-If you put the contents of the `dist` folder in a publicly-accessible location (say something like `http://mycoolserver.com`), 
-you should be able to open `http://mycoolserver.com/index.html` and play your game.
+## Setup
+
+- Clone this repository
+- Open terminal
+- Change directory by using `cd escape-rpg-game/`
+- Run `npm install`
+
+Then,
+
+- Run `npm run start`
+
+## Gameplay
+
+### Controls
+
+#### In Map,
+
+Keyboard arrow keys
+
+- Up: Go up
+- Down: Go Down
+- Left: Go left
+- Right: Go right
+
+#### Mouse
+
+- Click one of the buttons shown
+
+#### In Battle,
+
+#### Arrow keys
+
+- Up: Choose the next option in the menu
+- Down: Choose the previous option in the menu
+- Left: Change submenu. If the enemy has chosen in the most left menu, attack to the enemy
+
+## Logic
+
+- There two different enemy groups; visible and hidden enemies
+- There are four visible dragons. To finish the game, three of them must be killed. They are strong, so you may not kill them at the beginning of the game
+- There are hidden enemies. They are weaker than visible ones. But you may find them everywhere.
+- When an enemy is killed, they provide you high damage to attack any enemies and an increase in your score.
+- When three of the visible enemies are killed, you may escape from the island. So, you need to take the submarine and go to the bottom right part of the map.
+- When the game is finished, a scoreboard is shown.
+
+## Development Process
+
+### Overview
+
+- I planned the game would have two main scenes; world and battle. In the map scene, the player can go anywhere if it is allowed. In the battle scene, the player and an enemy fight each other.
+
+### Story and Gameplay
+
+- Our character is wakening up on the island and should escape from this island. If enough enemies can be killed, escaping from this island is possible. Two vehicles can be used to visit the different parts of the map and escape from the island. The submarine will be activated when three of the visible enemies are killed.
+
+### Score system
+
+- When our character kills any enemy, the score is increased. If our character can escape from the island, a scoreboard is shown, and it contains the top 5 players in terms of score. The score is shown at the top left edge of the screen.
+
+### Map
+
+- Map contains three main parts; obstacles, grass, and water. More, it includes small areas to take or take off any vehicle. To build the map, [Tiled](https://www.mapeditor.org/) is used.
+
+### Animations and textures
+
+- To build some animations and textures, [Pixelorama](https://github.com/Orama-Interactive/Pixelorama) is used.
+
+## Test
+
+Follow the setup part. Then;
+
+- Run "npm run test" in your terminal
+
+## Authors
+
+Reach out to me at one of the following places!
+
+👤 **Hasan Özovalı**
+
+- LinkedIn: [Hasan Ozovali](https://www.linkedin.com/in/hasan-ozovali/)
+- Github: [@ozovalihasan](https://github.com/ozovalihasan)
+- Twitter: [@ozovalihasan](https://twitter.com/ozovalihasan)
+- Mail: [ozovalihasan@gmail.com](ozovalihasan@gmail.com)
+
+## Contributing 🤝
+
+Contributions, issues, and feature requests are welcome!
+
+Feel free to check the [issues page](https://github.com/ozovalihasan/escape-rpg-game/issues).
+
+## Acknowledgments
+
+Thanks to;
+
+- [Microverse](http://microverse.org/) for its support.
+- Members of the [opengameart](https://opengameart.org) for supplied material.
+- [phasertutorials](https://phasertutorials.com/creating-a-phaser-3-template-part-1/) for the template of the game.
+- [gamedevacademy](https://gamedevacademy.org/how-to-create-a-turn-based-rpg-game-in-phaser-3-part-1/) for the amazing tutorial.
+
+## Show your support
+
+Give a ⭐️ if you like this project!
+
+## License
+
+[![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
+
+- **[MIT license](http://opensource.org/licenses/mit-license.php)**

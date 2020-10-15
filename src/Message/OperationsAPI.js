@@ -14,7 +14,7 @@ const OperationsAPI = () => {
           user,
           score,
         }),
-      }
+      },
     );
   }
 
@@ -24,7 +24,7 @@ const OperationsAPI = () => {
       {
         method: 'GET',
         mode: 'cors',
-      }
+      },
     );
     const results = await scores.json();
     return results;

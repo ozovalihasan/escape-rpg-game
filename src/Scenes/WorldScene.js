@@ -131,35 +131,70 @@ export default class WorldScene extends Phaser.Scene {
       repeat: -1,
     });
 
-    // don't go out of the map
     this.physics.world.bounds.width = map.widthInPixels;
     this.physics.world.bounds.height = map.heightInPixels;
     this.player.setCollideWorldBounds(true);
 
-    // limit camera to map
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     this.cameras.main.startFollow(this.player);
-    this.cameras.main.roundPixels = true; // avoid tile bleed
+    this.cameras.main.roundPixels = true;
 
-    // user input
     this.cursors = this.input.keyboard.createCursorKeys();
-    // this.cursors.addKey('ESC');
+
     this.cursors.esc = this.input.keyboard.addKey('ESC');
-    // where the enemies will be
-    this.spawns = this.physics.add.group({
-      classType: Phaser.GameObjects.Zone,
+
+    this.bigBoss = this.physics.add.staticGroup({
+      classType: Phaser.Physics.Arcade.sprite,
     });
-    for (var i = 0; i < 30; i++) {
-      var x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
-      var y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
-      // parameters are x, y, width, height
-      this.spawns.create(x, y, 20, 20);
-    }
-    // add collider
+
+    this.bigBoss.create(100, 20, 'dragonorange');
+    this.bigBoss.create(300, 300, 'dragonorange');
+    this.bigBoss.create(0, 290, 'dragonorange');
+    this.bigBoss.create(350, 20, 'dragonblue');
+
     this.physics.add.overlap(
       this.player,
-      this.spawns,
-      this.onMeetEnemy,
+      this.bigBoss,
+      (body1, body2) => {
+        this.player.enemy = {
+          name: 'Dragon',
+          texture: 'dragonorange',
+          damage: [40, 70],
+          addScore: [20, 30],
+          addDamage: [5, 8],
+          hp: [70, 90],
+        };
+        this.onMeetEnemy(body1, body2);
+      },
+      false,
+      this
+    );
+
+    this.hiddenEnemies = this.physics.add.group({
+      classType: Phaser.GameObjects.Zone,
+    });
+
+    for (let i = 0; i < 15; i += 1) {
+      const x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
+      const y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
+
+      this.hiddenEnemies.create(x, y, 10, 10);
+    }
+
+    this.physics.add.overlap(
+      this.player,
+      this.hiddenEnemies,
+      (body1, body2) => {
+        this.player.enemy = {
+          name: 'Dragon',
+          texture: 'dragonblue',
+          damage: [20, 60],
+          addScore: [10, 20],
+          addDamage: [2, 5],
+          hp: [60, 70],
+        };
+        this.onMeetEnemy(body1, body2);
+      },
       false,
       this
     );

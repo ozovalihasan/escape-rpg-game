@@ -434,31 +434,29 @@ export default class WorldScene extends Phaser.Scene {
     this.cancelButton.destroy();
   }
 
+  update() {
     this.player.body.setVelocity(0);
 
-    // Horizontal movement
-    if (this.cursors.left.isDown) {
-      this.player.body.setVelocityX(-80);
-    } else if (this.cursors.right.isDown) {
-      this.player.body.setVelocityX(80);
-    }
-    // Vertical movement
-    if (this.cursors.up.isDown) {
-      this.player.body.setVelocityY(-80);
-    } else if (this.cursors.down.isDown) {
-      this.player.body.setVelocityY(80);
+    if (this.player.actionWay) {
+      if (this.cursors.left.isDown) {
+        this.player.body.setVelocityX(-80);
+      } else if (this.cursors.right.isDown) {
+        this.player.body.setVelocityX(80);
+      }
+
+      if (this.cursors.up.isDown) {
+        this.player.body.setVelocityY(-80);
+      } else if (this.cursors.down.isDown) {
+        this.player.body.setVelocityY(80);
+      }
     }
 
     if (this.cursors.esc.isDown) {
       this.visibleToggle(this.titleButton);
       this.cursors.esc.isDown = false;
     }
-    // Update the animation last and give left/right animations precedence over up/down animations
 
-    if (
-      this.player.actionWay === 'boat' ||
-      this.player.actionWay === 'boatWalk'
-    ) {
+    if (this.player.actionWay === 'boat') {
       this.boat.x = this.player.x - 1;
       this.boat.y = this.player.y + 10;
       this.player.anims.play('boatRight', true);
@@ -470,6 +468,16 @@ export default class WorldScene extends Phaser.Scene {
       } else {
         this.player.flipX = true;
         this.boat.flipX = false;
+      }
+    } else if (this.player.actionWay === 'submarine') {
+      this.submarine.x = this.player.x - 5;
+      this.submarine.y = this.player.y + 5;
+      if (this.cursors.left.isDown) {
+        this.player.flipX = false;
+        this.submarine.flipX = true;
+      } else {
+        this.player.flipX = true;
+        this.submarine.flipX = false;
       }
     } else {
       this.boat.anims.stop();

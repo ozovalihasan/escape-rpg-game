@@ -62,11 +62,43 @@ export default class WorldScene extends Phaser.Scene {
       classType: Phaser.GameObjects.Zone,
     });
 
-    this.getBoat({ x: 56, y: 160, width: 48, height: 1, delta: 4 });
-    this.getOffBoat({ x: 56, y: 144, width: 48, height: 1, delta: -4 });
+    this.getVehicle({
+      x: 56,
+      y: 160,
+      width: 48,
+      height: 1,
+      direction: 'y',
+      delta: 4,
+      vehicle: 'boat',
+    });
+    this.getOffVehicle({
+      x: 56,
+      y: 144,
+      width: 48,
+      height: 1,
+      direction: 'y',
+      delta: -4,
+      vehicle: 'boat',
+    });
 
-    this.getBoat({ x: 208, y: 16, width: 1, height: 32, delta: -4 });
-    this.getOffBoat({ x: 224, y: 16, width: 1, height: 32, delta: 4 });
+    this.getVehicle({
+      x: 208,
+      y: 16,
+      width: 1,
+      height: 32,
+      direction: 'x',
+      delta: -4,
+      vehicle: 'boat',
+    });
+    this.getOffVehicle({
+      x: 224,
+      y: 16,
+      width: 1,
+      height: 32,
+      direction: 'x',
+      delta: 4,
+      vehicle: 'boat',
+    });
 
     this.anims.create({
       key: 'marine',

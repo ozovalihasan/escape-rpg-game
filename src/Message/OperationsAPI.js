@@ -1,7 +1,7 @@
 import 'regenerator-runtime';
 
 const OperationsAPI = () => {
-  async function update(user, score, gameId = 'i25LxmJPmkS0pEceLraW') {
+  async function update(user, score, gameId = 'xKP6trM4cqMwrneEXhq3') {
     return fetch(
       `https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/${gameId}/scores`,
       {
@@ -14,17 +14,17 @@ const OperationsAPI = () => {
           user,
           score,
         }),
-      },
+      }
     );
   }
 
-  async function getScores(gameId = 'i25LxmJPmkS0pEceLraW') {
+  async function getScores(gameId = 'xKP6trM4cqMwrneEXhq3') {
     const scores = await fetch(
       `https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/${gameId}/scores`,
       {
         method: 'GET',
         mode: 'cors',
-      },
+      }
     );
     const results = await scores.json();
     return results;

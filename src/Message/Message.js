@@ -3,7 +3,7 @@ import config from '../Config/config';
 
 export default class Message extends Phaser.GameObjects.Container {
   constructor(scene, events) {
-    super(scene, config.width / 2 , 20);
+    super(scene, config.width / 2, 20);
 
     const graphics = this.scene.add.graphics();
     this.add(graphics);

@@ -216,7 +216,7 @@ export default class WorldScene extends Phaser.Scene {
         this.player.enemy = {
           name: 'Dragon',
           texture: 'dragonblue',
-          damage: [20, 60],
+          damage: [20, 35],
           addScore: [10, 20],
           addDamage: [2, 5],
           hp: [60, 70],

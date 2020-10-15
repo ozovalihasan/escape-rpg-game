@@ -30,7 +30,6 @@ export default class BattleScene extends Phaser.Scene {
 
     this.add.existing(warrior);
 
-
     const dragonblue = new Enemy(
       this,
       config.width / 4,
@@ -42,7 +41,6 @@ export default class BattleScene extends Phaser.Scene {
       this.world.player.enemy.damage,
     );
     this.add.existing(dragonblue);
-
 
     this.heroes = [warrior];
 
@@ -88,7 +86,6 @@ export default class BattleScene extends Phaser.Scene {
     }
   }
 
-
   checkEndBattle() {
     let victory = true;
 
@@ -106,13 +103,11 @@ export default class BattleScene extends Phaser.Scene {
     return victory || gameOver;
   }
 
-
   receivePlayerSelection(action, target) {
     if (action === 'attack') {
       this.units[this.index].attack(this.enemies[target]);
     }
     this.events.emit('UpdateHealthBars');
-
 
     this.time.addEvent({
       delay: 3000,
@@ -123,7 +118,6 @@ export default class BattleScene extends Phaser.Scene {
 
   endBattle() {
     this.events.emit('DeleteHealthBars');
-
 
     this.scene.sleep('UI');
 

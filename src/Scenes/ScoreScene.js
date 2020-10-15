@@ -1,5 +1,9 @@
-import config from '../Config/config';
+
+/* eslint-disable no-alert */
+
+
 import Phaser from 'phaser';
+import config from '../Config/config';
 import OperationsAPI from '../Message/OperationsAPI';
 import Button from '../Objects/Button';
 
@@ -7,6 +11,7 @@ export default class ScoreScene extends Phaser.Scene {
   constructor() {
     super('Score');
   }
+
   create() {
     OperationsAPI.getScores()
       .then((games) => {
@@ -52,7 +57,9 @@ export default class ScoreScene extends Phaser.Scene {
       'blueButton1',
       'blueButton2',
       'Menu',
-      'Title'
+      'Title',
     );
   }
 }
+
+/* eslint-enable no-alert */

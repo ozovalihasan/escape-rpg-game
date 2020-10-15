@@ -14,32 +14,30 @@ export default class BattleScene extends Phaser.Scene {
     this.sys.events.on('wake', this.startBattle, this);
   }
   startBattle() {
-    // player character - warrior
-    var warrior = new PlayerCharacter(
+    this.world = this.scene.get('World');
+    const warrior = new PlayerCharacter(
       this,
-      250,
-      50,
+      (config.width * 3) / 4,
+      (config.height * 1) / 3,
       'player',
       1,
       'Warrior',
-      100,
-      20
+      [100, 110],
+      [this.world.player.damage, this.world.player.damage + 20],
     );
+
     this.add.existing(warrior);
 
-    // player character - mage
-    // var mage = new PlayerCharacter(this, 250, 100, 'player', 4, 'Mage', 80, 20);
-    // this.add.existing(mage);
 
-    var dragonblue = new Enemy(
+    const dragonblue = new Enemy(
       this,
-      50,
-      50,
-      'dragonblue',
+      config.width / 4,
+      (config.height * 1) / 3,
+      this.world.player.enemy.texture,
       null,
-      'Dragon',
-      50,
-      3
+      this.world.player.enemy.name,
+      this.world.player.enemy.hp,
+      this.world.player.enemy.damage,
     );
     this.add.existing(dragonblue);
 
@@ -113,6 +111,9 @@ export default class BattleScene extends Phaser.Scene {
     // if all heroes are dead we have game over
     for (var i = 0; i < this.heroes.length; i++) {
       if (this.heroes[i].living) gameOver = false;
+    }
+    if (gameOver) {
+      this.world.finishGame();
     }
     return victory || gameOver;
   }

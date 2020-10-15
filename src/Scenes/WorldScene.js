@@ -231,26 +231,67 @@ export default class WorldScene extends Phaser.Scene {
       this
     );
 
-    this.titleButton = new ActionButton(
+    this.titleButton = new Button(
       this,
       config.width / 2,
       config.height / 2 - 100,
       'blueButton1',
       'blueButton2',
       'Menu',
-      async () => {
-        OperationsAPI.update(
-          this.sys.game.globals.username,
-          this.player.score
-        ).then(() => {
-          this.scene.start('Score');
-        });
-      }
+      'Title'
     );
+
     this.titleButton.visible = false;
 
-    // we listen for 'wake' event
     this.sys.events.on('wake', this.wake, this);
+
+    this.succesfulFinish(map);
+  }
+
+  succesfulFinish(map) {
+    this.finishZone = this.physics.add
+      .group({
+        classType: Phaser.GameObjects.Zone,
+      })
+      .create(map.widthInPixels - 40, map.heightInPixels - 40, 40, 40)
+      .setOrigin(0, 0);
+
+    this.physics.add.overlap(this.finishZone, this.player, (zone) => {
+      zone.destroy();
+      this.finishGame();
+    });
+  }
+
+  finishGame() {
+    (async () => {
+      OperationsAPI.update(
+        this.sys.game.globals.username,
+        this.player.score
+      ).then(() => {
+        this.scene.start('Score');
+      });
+    })();
+  }
+
+  addSubmarine() {
+    this.getVehicle({
+      x: 416,
+      y: 240,
+      width: 32,
+      height: 1,
+      direction: 'y',
+      delta: 4,
+      vehicle: 'submarine',
+    });
+    this.getOffVehicle({
+      x: 416,
+      y: 224,
+      width: 32,
+      height: 1,
+      direction: 'y',
+      delta: -4,
+      vehicle: 'submarine',
+    });
   }
 
   visibleToggle(element) {
@@ -260,27 +301,47 @@ export default class WorldScene extends Phaser.Scene {
       element.visible = true;
     }
   }
+
   wake() {
     this.cursors.left.reset();
     this.cursors.right.reset();
     this.cursors.up.reset();
     this.cursors.down.reset();
   }
+
   updateScore(delta) {
     this.player.score += delta;
     this.scoreText.setText(this.player.score);
   }
 
-  onMeetEnemy(player, zone) {
-    // we move the zone to some other location
-    zone.x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
-    zone.y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
+  updateDamage(delta) {
+    this.player.damage += delta;
+  }
 
-    // shake the world
+  winGame() {
+    this.updateScore(
+      Phaser.Math.RND.between(
+        this.player.enemy.addScore[0],
+        this.player.enemy.addScore[1]
+      )
+    );
+    this.updateDamage(
+      Phaser.Math.RND.between(
+        this.player.enemy.addDamage[0],
+        this.player.enemy.addDamage[1]
+      )
+    );
+    if (this.bigBoss.getLength === 1) {
+      this.addSubmarine();
+    }
+  }
+
+  onMeetEnemy(player, zone) {
     this.cameras.main.shake(300);
 
     this.input.stopPropagation();
-    // start battle
+    zone.destroy();
+
     this.scene.switch('Battle');
   }
 

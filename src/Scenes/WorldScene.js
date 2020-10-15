@@ -9,32 +9,27 @@ export default class WorldScene extends Phaser.Scene {
   constructor() {
     super('World');
   }
+
   create() {
-    // create the map
-    var map = this.make.tilemap({ key: 'map' });
+    const map = this.make.tilemap({ key: 'map' });
 
-    // first parameter is the name of the tilemap in tiled
-    var tiles = map.addTilesetImage('spritesheet', 'tiles');
 
-    // creating the layers
-    var grass = map.createStaticLayer('Grass', tiles, 0, 0);
-    var obstacles = map.createStaticLayer('Obstacles', tiles, 0, 0);
-    var river = map.createStaticLayer('River', tiles, 0, 0);
-    var lake = map.createStaticLayer('Lake', tiles, 0, 0);
-    var sea = map.createStaticLayer('Sea', tiles, 0, 0);
-    var land = map.createStaticLayer('Land', tiles, 0, 0);
-    var shore = map.createStaticLayer('Shore', tiles, 0, 0);
+    const tiles = map.addTilesetImage('spritesheet', 'tiles');
 
-    // make all tiles in obstacles collidable
+
+    const grass = map.createStaticLayer('Grass', tiles, 0, 0);
+    const obstacles = map.createStaticLayer('Obstacles', tiles, 0, 0);
+    const water = map.createStaticLayer('Water', tiles, 0, 0);
+    const shore = map.createStaticLayer('Shore', tiles, 0, 0);
+
+
     grass.setCollisionByExclusion([-1]);
     obstacles.setCollisionByExclusion([-1]);
-    river.setCollisionByExclusion([-1]);
-    lake.setCollisionByExclusion([-1]);
-    sea.setCollisionByExclusion([-1]);
-    land.setCollisionByExclusion([-1]);
+    water.setCollisionByExclusion([-1]);
     shore.setCollisionByExclusion([-1]);
 
     this.player = this.physics.add.sprite(50, 100, 'player', 6);
+    this.player.damage = 10;
     this.player.actionWay = 'walk';
     this.player.score = 0;
 
@@ -45,18 +40,15 @@ export default class WorldScene extends Phaser.Scene {
       })
       .setScrollFactor(0);
 
-    this.marine = this.physics.add.sprite(410, 250, 'marine', 1);
-    this.marine.setScale(0.5);
+    this.submarine = this.physics.add.sprite(410, 250, 'submarine', 1);
+    this.submarine.setScale(0.5);
 
     this.boat = this.physics.add.sprite(60, 160, 'boat', 0);
     this.boat.setScale(0.8);
     this.player.collider = {};
     this.player.collider = {
       obstacles: this.physics.add.collider(this.player, obstacles),
-      river: this.physics.add.collider(this.player, river),
-      lake: this.physics.add.collider(this.player, lake),
-      sea: this.physics.add.collider(this.player, sea),
-      land: this.physics.add.collider(this.player, land),
+      water: this.physics.add.collider(this.player, water),
       grass: this.physics.add.collider(this.player, grass),
       shore: this.physics.add.collider(this.player, shore),
     };

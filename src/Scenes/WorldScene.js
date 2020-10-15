@@ -1,8 +1,8 @@
+/* eslint-disable prefer-destructuring, class-methods-use-this */
 import Phaser from 'phaser';
 import TakeVehicle from '../Objects/TakeVehicle';
 import config from '../Config/config';
 import Button from '../Objects/Button';
-import ActionButton from '../Objects/ActionButton';
 import OperationsAPI from '../Message/OperationsAPI';
 
 export default class WorldScene extends Phaser.Scene {
@@ -125,7 +125,6 @@ export default class WorldScene extends Phaser.Scene {
       repeat: -1,
     });
 
-    //  animation with key 'left', we don't need left and right as we will use one and flip the sprite
     this.anims.create({
       key: 'left',
       frames: this.anims.generateFrameNumbers('player', {
@@ -135,7 +134,6 @@ export default class WorldScene extends Phaser.Scene {
       repeat: -1,
     });
 
-    // animation with key 'right'
     this.anims.create({
       key: 'right',
       frames: this.anims.generateFrameNumbers('player', {
@@ -197,7 +195,7 @@ export default class WorldScene extends Phaser.Scene {
         this.onMeetEnemy(body1, body2);
       },
       false,
-      this
+      this,
     );
 
     this.hiddenEnemies = this.physics.add.group({
@@ -226,7 +224,7 @@ export default class WorldScene extends Phaser.Scene {
         this.onMeetEnemy(body1, body2);
       },
       false,
-      this
+      this,
     );
 
     this.titleButton = new Button(
@@ -236,7 +234,7 @@ export default class WorldScene extends Phaser.Scene {
       'blueButton1',
       'blueButton2',
       'Menu',
-      'Title'
+      'Title',
     );
 
     this.titleButton.visible = false;
@@ -264,7 +262,7 @@ export default class WorldScene extends Phaser.Scene {
     (async () => {
       OperationsAPI.update(
         this.sys.game.globals.username,
-        this.player.score
+        this.player.score,
       ).then(() => {
         this.scene.start('Score');
       });
@@ -320,14 +318,14 @@ export default class WorldScene extends Phaser.Scene {
     this.updateScore(
       Phaser.Math.RND.between(
         this.player.enemy.addScore[0],
-        this.player.enemy.addScore[1]
-      )
+        this.player.enemy.addScore[1],
+      ),
     );
     this.updateDamage(
       Phaser.Math.RND.between(
         this.player.enemy.addDamage[0],
-        this.player.enemy.addDamage[1]
-      )
+        this.player.enemy.addDamage[1],
+      ),
     );
     if (this.bigBoss.getLength === 1) {
       this.addSubmarine();
@@ -348,7 +346,7 @@ export default class WorldScene extends Phaser.Scene {
       zoneShape.x,
       zoneShape.y,
       zoneShape.width,
-      zoneShape.height
+      zoneShape.height,
     ).delta = [zoneShape.direction, zoneShape.delta, zoneShape.vehicle];
 
     this.player.collider.waterShore = this.physics.add.overlap(
@@ -366,7 +364,7 @@ export default class WorldScene extends Phaser.Scene {
               this.player[body2.delta[0]] += body2.delta[1];
               this.player.actionWay = body2.delta[2];
             },
-            `Get ${body2.delta[2]}`
+            `Get ${body2.delta[2]}`,
           );
 
           this.cancelButton = new TakeVehicle(this, () => {
@@ -380,7 +378,7 @@ export default class WorldScene extends Phaser.Scene {
         }
       },
       false,
-      this
+      this,
     );
   }
 
@@ -389,7 +387,7 @@ export default class WorldScene extends Phaser.Scene {
       zoneShape.x,
       zoneShape.y,
       zoneShape.width,
-      zoneShape.height
+      zoneShape.height,
     ).delta = [zoneShape.direction, zoneShape.delta, zoneShape.vehicle];
 
     this.player.collider.grassShore = this.physics.add.overlap(
@@ -407,7 +405,7 @@ export default class WorldScene extends Phaser.Scene {
               this.player[body2.delta[0]] += body2.delta[1];
               this.player.actionWay = 'walk';
             },
-            `Get off ${body2.delta[2]}`
+            `Get off ${body2.delta[2]}`,
           );
 
           this.cancelButton = new TakeVehicle(this, () => {
@@ -421,7 +419,7 @@ export default class WorldScene extends Phaser.Scene {
         }
       },
       false,
-      this
+      this,
     );
 
     this.player.collider.grassShore.active = false;
@@ -496,3 +494,4 @@ export default class WorldScene extends Phaser.Scene {
     }
   }
 }
+/* eslint-enable prefer-destructuring, class-methods-use-this */

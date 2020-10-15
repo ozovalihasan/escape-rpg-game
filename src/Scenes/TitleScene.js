@@ -1,3 +1,5 @@
+/* eslint-disable no-alert */
+
 import Phaser from 'phaser';
 import config from '../Config/config';
 import Button from '../Objects/Button';
@@ -11,10 +13,10 @@ export default class TitleScene extends Phaser.Scene {
   create() {
     this.sys.game.globals.username = 'Guest';
     this.username = this.add.text(
-      config.width/2,
-      config.height /7,
+      config.width / 2,
+      config.height / 7,
       `Welcome ${this.sys.game.globals.username}!`,
-      { fill: '#0f0' }
+      { fill: '#0f0' },
     ).setOrigin(0.5, 0.5);
 
     this.changeName = new ActionButton(
@@ -30,44 +32,44 @@ export default class TitleScene extends Phaser.Scene {
           this.sys.game.globals.username = result;
           this.username.setText(`Welcome ${result}!`);
         }
-      }
+      },
     );
     this.gameButton = new Button(
       this,
       config.width / 2,
-      config.height* 3/ 7,
+      config.height * (3 / 7),
       'blueButton1',
       'blueButton2',
       'Play',
-      'World'
+      'World',
     );
     this.optionsButton = new Button(
       this,
       config.width / 2,
-      config.height * 4/ 7,
+      config.height * (4 / 7),
       'blueButton1',
       'blueButton2',
       'Options',
-      'Options'
+      'Options',
     );
 
     this.scoreButton = new Button(
       this,
       config.width / 2,
-      config.height * 5/ 7,
+      config.height * (5 / 7),
       'blueButton1',
       'blueButton2',
       'Score Board',
-      'Score'
+      'Score',
     );
     this.creditsButton = new Button(
       this,
       config.width / 2,
-      config.height * 6/ 7,
+      config.height * (6 / 7),
       'blueButton1',
       'blueButton2',
       'Credits',
-      'Credits'
+      'Credits',
     );
 
     this.model = this.sys.game.globals.model;
@@ -79,3 +81,4 @@ export default class TitleScene extends Phaser.Scene {
     }
   }
 }
+/* eslint-enable no-alert */

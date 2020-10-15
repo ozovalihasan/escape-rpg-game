@@ -7,6 +7,7 @@ export default class MenuItem extends Phaser.GameObjects.Text {
       align: 'left',
       fontSize: 15,
     });
+    this.setOrigin(0.5, 0.5);
   }
 
   select() {
@@ -16,7 +17,7 @@ export default class MenuItem extends Phaser.GameObjects.Text {
   deselect() {
     this.setColor('#ffffff');
   }
-  // when the associated enemy or player unit is killed
+
   unitKilled() {
     this.active = false;
     this.visible = false;

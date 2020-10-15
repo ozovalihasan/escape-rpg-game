@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import Phaser from 'phaser';
 import HeroesMenu from '../Menus/HeroesMenu';
 import EnemiesMenu from '../Menus/EnemiesMenu';
@@ -138,71 +139,73 @@ export default class UIScene extends Phaser.Scene {
   }
 
   setValue(unit) {
-    //scale the bar
     unit.bar[0].scaleX = unit.unit.hp / unit.unit.maxHp;
   }
 
   updateBars() {
-    for (const oneBar in this.healthBar) {
-      this.setValue(this.healthBar[oneBar]);
-      this.healthBar[oneBar].text.setText(this.healthBar[oneBar].unit.hp);
-    }
+    Object.values(this.healthBar).forEach((oneBar) => {
+      this.setValue(oneBar);
+      oneBar.text.setText(oneBar.unit.hp);
+    });
   }
 
   deleteBars() {
-    for (const oneBar in this.healthBar) {
-      this.healthBar[oneBar].bar[0].destroy();
-      this.healthBar[oneBar].bar[1].destroy();
-    }
+    Object.values(this.healthBar).forEach((oneBar) => {
+      oneBar.bar[0].destroy();
+      oneBar.bar[1].destroy();
+      oneBar.text.destroy();
+    });
   }
 
   createMenu() {
-    // map hero menu items to heroes
     this.remapHeroes();
-    // map enemies menu items to enemies
+
     this.remapEnemies();
-    // first move
+
     this.battle.nextTurn();
   }
+
   onEnemy(index) {
-    // when the enemy is selected, we deselect all menus and send event with the enemy id
     this.heroesMenu.deselect();
     this.actionsMenu.deselect();
     this.enemiesMenu.deselect();
     this.currentMenu = null;
     this.battle.receivePlayerSelection('attack', index);
   }
+
   onPlayerSelect(id) {
-    // when its player turn, we select the active hero item and the first action
-    // then we make actions menu active
     this.heroesMenu.select(id);
     this.actionsMenu.select(0);
     this.currentMenu = this.actionsMenu;
   }
-  // we have action selected and we make the enemies menu active
-  // the player needs to choose an enemy to attack
+
+
   onSelectedAction() {
     this.currentMenu = this.enemiesMenu;
     this.enemiesMenu.select(0);
   }
+
   remapHeroes() {
-    var heroes = this.battle.heroes;
+    const { heroes } = this.battle;
     this.heroesMenu.remap(heroes);
   }
+
   remapEnemies() {
-    var enemies = this.battle.enemies;
+    const { enemies } = this.battle;
     this.enemiesMenu.remap(enemies);
   }
+
   onKeyInput(event) {
     if (this.currentMenu && this.currentMenu.selected) {
       if (event.code === 'ArrowUp') {
         this.currentMenu.moveSelectionUp();
       } else if (event.code === 'ArrowDown') {
         this.currentMenu.moveSelectionDown();
-      } else if (event.code === 'ArrowRight' || event.code === 'Shift') {
       } else if (event.code === 'Space' || event.code === 'ArrowLeft') {
         this.currentMenu.confirm();
       }
     }
   }
 }
+
+/* eslint-enable class-methods-use-this */

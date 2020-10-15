@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import config from '../Config/config';
 import Enemy from '../Objects/Enemy';
 import PlayerCharacter from '../Objects/PlayerCharacter';
 
@@ -6,13 +7,14 @@ export default class BattleScene extends Phaser.Scene {
   constructor() {
     super('Battle');
   }
+
   create() {
-    // change the background to green
     this.cameras.main.setBackgroundColor('rgba(0, 200, 0, 0.5)');
     this.startBattle();
-    // on wake event we call startBattle too
+
     this.sys.events.on('wake', this.startBattle, this);
   }
+
   startBattle() {
     this.world = this.scene.get('World');
     const warrior = new PlayerCharacter(
@@ -41,56 +43,41 @@ export default class BattleScene extends Phaser.Scene {
     );
     this.add.existing(dragonblue);
 
-    // var dragonOrange = new Enemy(
-    //   this,
-    //   50,
-    //   100,
-    //   'dragonorange',
-    //   null,
-    //   'Dragon2',
-    //   10,
-    //   3
-    // );
-    // this.add.existing(dragonOrange);
-    // array with heroes
-    this.heroes = [warrior]; //[warrior, mage]
-    // array with enemies
-    this.enemies = [dragonblue]; //[dragonblue, dragonOrange]
-    // array with both parties, who will attack
+
+    this.heroes = [warrior];
+
+    this.enemies = [dragonblue];
+
     this.units = this.heroes.concat(this.enemies);
 
-    this.index = -1; // currently active unit
+    this.index = -1;
 
     this.scene.run('UI');
   }
+
   nextTurn() {
-    // if we have victory or game over
     if (this.checkEndBattle()) {
       this.endBattle();
       return;
     }
     do {
-      // currently active unit
-      this.index++;
-      // if there are no more units, we start again from the first one
+      this.index += 1;
+
       if (this.index >= this.units.length) {
         this.index = 0;
       }
     } while (!this.units[this.index].living);
-    // if its player hero
+
     if (this.units[this.index] instanceof PlayerCharacter) {
-      // we need the player to select action and then enemy
       this.events.emit('PlayerSelect', this.index);
     } else {
-      // else if its enemy unit
-      // pick random living hero to be attacked
-      var r;
+      let r;
       do {
         r = Math.floor(Math.random() * this.heroes.length);
       } while (!this.heroes[r].living);
-      // call the enemy's attack function
+
       this.units[this.index].attack(this.heroes[r]);
-      // add timer for the next turn, so will have smooth gameplay
+
       this.events.emit('UpdateHealthBars');
 
       this.time.addEvent({
@@ -100,16 +87,17 @@ export default class BattleScene extends Phaser.Scene {
       });
     }
   }
-  // check for ame over or victory
+
+
   checkEndBattle() {
-    var victory = true;
-    // if all enemies are dead we have victory
-    for (var i = 0; i < this.enemies.length; i++) {
+    let victory = true;
+
+    for (let i = 0; i < this.enemies.length; i += 1) {
       if (this.enemies[i].living) victory = false;
     }
-    var gameOver = true;
-    // if all heroes are dead we have game over
-    for (var i = 0; i < this.heroes.length; i++) {
+    let gameOver = true;
+
+    for (let i = 0; i < this.heroes.length; i += 1) {
       if (this.heroes[i].living) gameOver = false;
     }
     if (gameOver) {
@@ -117,29 +105,29 @@ export default class BattleScene extends Phaser.Scene {
     }
     return victory || gameOver;
   }
-  // when the player hae selected the enemy to be attacked
+
+
   receivePlayerSelection(action, target) {
-    if (action == 'attack') {
+    if (action === 'attack') {
       this.units[this.index].attack(this.enemies[target]);
     }
     this.events.emit('UpdateHealthBars');
 
-    // next turn in 3 seconds
+
     this.time.addEvent({
       delay: 3000,
       callback: this.nextTurn,
       callbackScope: this,
     });
   }
+
   endBattle() {
-    // clear state, remove sprites
     this.events.emit('DeleteHealthBars');
 
-    // sleep the UI
+
     this.scene.sleep('UI');
-    // return to WorldScene and sleep current BattleScene
+
     this.scene.switch('World');
-    this.world = this.scene.get('World');
-    this.world.updateScore(10);
+    this.world.winGame();
   }
 }

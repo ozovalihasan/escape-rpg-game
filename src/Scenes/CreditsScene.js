@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-expressions */
 
+
 import Phaser from 'phaser';
 import config from '../Config/config';
 
@@ -13,7 +14,7 @@ export default class CreditsScene extends Phaser.Scene {
       fontsize: '32px',
       fill: '#fff',
     });
-    this.madeByText = this.add.text(0, 0, 'Created By: Placeholder', {
+    this.madeByText = this.add.text(0, 0, 'Created By: Hasan Ozovali', {
       fontsize: '26px',
       fill: '#fff',
     });

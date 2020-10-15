@@ -11,15 +11,14 @@ export default class PreloaderScene extends Phaser.Scene {
   }
 
   preload() {
-    this.add.image(config.width/2, config.width/5, 'logo');
+    this.add.image(config.width / 2, config.width / 5, 'logo');
 
     const progressBar = this.add.graphics();
     const progressBox = this.add.graphics();
     progressBox.fillStyle(0x222222, 0.8);
-    progressBox.fillRect(config.width/5, 270, 320, 50);
+    progressBox.fillRect(config.width / 5, 270, 320, 50);
 
-    // const { width } = this.cameras.main;
-    // const { height } = this.cameras.main;
+
     const loadingText = this.make.text({
       x: config.width / 2,
       y: config.height / 2 + 20,
@@ -57,7 +56,7 @@ export default class PreloaderScene extends Phaser.Scene {
       percentText.setText(`${parseInt(value * 100, 10)}%`);
       progressBar.clear();
       progressBar.fillStyle(0xffffff, 1);
-      progressBar.fillRect(config.width/5+10, 280, 300 * value, 30);
+      progressBar.fillRect(config.width / 5 + 10, 280, 300 * value, 30);
     });
 
     this.load.on('fileprogress', (file) => {
@@ -77,16 +76,16 @@ export default class PreloaderScene extends Phaser.Scene {
 
     this.load.image('tiles', 'assets/map/spritesheet.png');
 
-    // map in json format
+
     this.load.tilemapTiledJSON('map', 'assets/map/map.json');
 
-    // our two characters
+
     this.load.spritesheet('player', 'assets/RPG_assets.png', {
       frameWidth: 16,
       frameHeight: 16,
     });
 
-    this.load.spritesheet('marine', 'assets/subMarineAll.png', {
+    this.load.spritesheet('submarine', 'assets/subMarineAll.png', {
       frameWidth: 73,
       frameHeight: 40,
     });
@@ -104,8 +103,6 @@ export default class PreloaderScene extends Phaser.Scene {
 
     this.load.image('dragonblue', 'assets/dragonblue.png');
     this.load.image('dragonorange', 'assets/dragonorange.png');
-
-    this.load.image('dragonblue1', 'assets/dragonblue.png');
   }
 
   ready() {

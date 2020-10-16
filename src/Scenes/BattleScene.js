@@ -41,15 +41,10 @@ export default class BattleScene extends Phaser.Scene {
       this.world.player.enemy.damage,
     );
     this.add.existing(dragonblue);
-
     this.heroes = [warrior];
-
     this.enemies = [dragonblue];
-
     this.units = this.heroes.concat(this.enemies);
-
     this.index = -1;
-
     this.scene.run('UI');
   }
 
@@ -118,9 +113,7 @@ export default class BattleScene extends Phaser.Scene {
 
   endBattle() {
     this.events.emit('DeleteHealthBars');
-
     this.scene.sleep('UI');
-
     this.scene.switch('World');
     this.world.winGame();
   }

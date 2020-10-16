@@ -68,26 +68,13 @@ export default class UIScene extends Phaser.Scene {
     this.menus.add(this.enemiesMenu);
 
     this.battle = this.scene.get('Battle');
-
-
     this.input.keyboard.on('keydown', this.onKeyInput, this);
-
-
     this.battle.events.on('PlayerSelect', this.onPlayerSelect, this);
-
-
     this.events.on('SelectedAction', this.onSelectedAction, this);
-
-
     this.events.on('Enemy', this.onEnemy, this);
-
-
     this.sys.events.on('wake', this.afterWake, this);
-
-
     this.message = new Message(this, this.battle.events);
     this.add.existing(this.message);
-
     this.createMenu();
     this.addHealthBars();
   }
@@ -159,9 +146,7 @@ export default class UIScene extends Phaser.Scene {
 
   createMenu() {
     this.remapHeroes();
-
     this.remapEnemies();
-
     this.battle.nextTurn();
   }
 

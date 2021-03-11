@@ -17,12 +17,12 @@ export default class Button extends Phaser.GameObjects.Container {
         fontSize: '24px',
         fill: '#fff',
       })
-      .setScrollFactor(0).setOrigin(0.5, 0.5);
+      .setScrollFactor(0)
+      .setOrigin(0.5, 0.5);
     Phaser.Display.Align.In.Center(this.text, this.button);
 
     this.add(this.button);
     this.add(this.text);
-
 
     this.button.on('pointerover', () => {
       this.button.setTexture(key2);
@@ -33,5 +33,9 @@ export default class Button extends Phaser.GameObjects.Container {
     });
 
     this.scene.add.existing(this);
+  }
+
+  visibleToggle() {
+    this.visible = !this.visible;
   }
 }

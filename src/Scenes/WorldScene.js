@@ -3,7 +3,6 @@ import Phaser from 'phaser';
 import TakeVehicle from '../Objects/TakeVehicle';
 import config from '../Config/config';
 import SceneButton from '../Objects/SceneButton';
-import OperationsAPI from '../Message/OperationsAPI';
 
 export default class WorldScene extends Phaser.Scene {
   constructor() {
@@ -195,14 +194,14 @@ export default class WorldScene extends Phaser.Scene {
         this.onMeetEnemy(body1, body2);
       },
       false,
-      this,
+      this
     );
 
     this.hiddenEnemies = this.physics.add.group({
       classType: Phaser.GameObjects.Zone,
     });
 
-    for (let i = 0; i < 15; i += 1) {
+    for (let i = 0; i < 10; i += 1) {
       const x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
       const y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);
 
@@ -224,7 +223,7 @@ export default class WorldScene extends Phaser.Scene {
         this.onMeetEnemy(body1, body2);
       },
       false,
-      this,
+      this
     );
 
     this.titleButton = new SceneButton(
@@ -234,13 +233,19 @@ export default class WorldScene extends Phaser.Scene {
       'blueButton1',
       'blueButton2',
       'Menu',
-      'Title',
+      'Title'
     );
 
     this.titleButton.visible = false;
 
     this.sys.events.on('wake', this.wake, this);
-
+    this.mouseTarget = [];
+    this.input.on('pointerdown', () => {
+      this.mouseTarget = [
+        this.input.x + this.cameras.main.worldView.x,
+        this.input.y + this.cameras.main.worldView.y,
+      ];
+    });
     this.succesfulFinish(map);
   }
 
@@ -256,17 +261,6 @@ export default class WorldScene extends Phaser.Scene {
       zone.destroy();
       this.finishGame();
     });
-  }
-
-  finishGame() {
-    (async () => {
-      OperationsAPI.update(
-        this.sys.game.globals.username,
-        this.player.score,
-      ).then(() => {
-        this.scene.start('Score');
-      });
-    })();
   }
 
   addSubmarine() {
@@ -290,14 +284,6 @@ export default class WorldScene extends Phaser.Scene {
     });
   }
 
-  visibleToggle(element) {
-    if (element.visible === true) {
-      element.visible = false;
-    } else {
-      element.visible = true;
-    }
-  }
-
   wake() {
     this.cursors.left.reset();
     this.cursors.right.reset();
@@ -318,14 +304,14 @@ export default class WorldScene extends Phaser.Scene {
     this.updateScore(
       Phaser.Math.RND.between(
         this.player.enemy.addScore[0],
-        this.player.enemy.addScore[1],
-      ),
+        this.player.enemy.addScore[1]
+      )
     );
     this.updateDamage(
       Phaser.Math.RND.between(
         this.player.enemy.addDamage[0],
-        this.player.enemy.addDamage[1],
-      ),
+        this.player.enemy.addDamage[1]
+      )
     );
     if (this.bigBoss.getLength() === 1) {
       this.addSubmarine();
@@ -346,7 +332,7 @@ export default class WorldScene extends Phaser.Scene {
       zoneShape.x,
       zoneShape.y,
       zoneShape.width,
-      zoneShape.height,
+      zoneShape.height
     ).delta = [zoneShape.direction, zoneShape.delta, zoneShape.vehicle];
 
     this.player.collider.waterShore = this.physics.add.overlap(
@@ -363,31 +349,27 @@ export default class WorldScene extends Phaser.Scene {
               this.player[body2.delta[0]] += body2.delta[1];
               this.player.actionWay = body2.delta[2];
             },
-            `Get ${body2.delta[2]}`,
+            `Get ${body2.delta[2]}`
           );
 
-          this.cancelButton = new TakeVehicle(
-            this,
-            () => {
-              this.activeCollider('waterShore', 'water');
-              this.player[body2.delta[0]] -= body2.delta[1];
-              this.player.actionWay = 'walk';
-            },
-          );
+          this.cancelButton = new TakeVehicle(this, () => {
+            this.activeCollider('waterShore', 'water');
+            this.player[body2.delta[0]] -= body2.delta[1];
+            this.player.actionWay = 'walk';
+          });
         }
       },
       false,
-      this,
+      this
     );
   }
-
 
   getOffVehicle(zoneShape) {
     this.grassShore.create(
       zoneShape.x,
       zoneShape.y,
       zoneShape.width,
-      zoneShape.height,
+      zoneShape.height
     ).delta = [zoneShape.direction, zoneShape.delta, zoneShape.vehicle];
 
     this.player.collider.grassShore = this.physics.add.overlap(
@@ -404,7 +386,7 @@ export default class WorldScene extends Phaser.Scene {
               this.player[body2.delta[0]] += body2.delta[1];
               this.player.actionWay = 'walk';
             },
-            `Get off ${body2.delta[2]}`,
+            `Get off ${body2.delta[2]}`
           );
 
           this.cancelButton = new TakeVehicle(this, () => {
@@ -415,7 +397,7 @@ export default class WorldScene extends Phaser.Scene {
         }
       },
       false,
-      this,
+      this
     );
 
     this.player.collider.grassShore.active = false;
@@ -441,18 +423,34 @@ export default class WorldScene extends Phaser.Scene {
 
     if (this.cursors.left.isDown) {
       this.player.body.setVelocityX(-80);
+      this.mouseTarget = [];
     } else if (this.cursors.right.isDown) {
       this.player.body.setVelocityX(80);
+      this.mouseTarget = [];
+    } else if (this.mouseTarget) {
+      if (this.mouseTarget[0] > this.player.x + 3) {
+        this.player.body.setVelocityX(80);
+      } else if (this.mouseTarget[0] < this.player.x - 3) {
+        this.player.body.setVelocityX(-80);
+      }
     }
 
     if (this.cursors.up.isDown) {
       this.player.body.setVelocityY(-80);
+      this.mouseTarget = [];
     } else if (this.cursors.down.isDown) {
       this.player.body.setVelocityY(80);
+      this.mouseTarget = [];
+    } else if (this.mouseTarget) {
+      if (this.mouseTarget[1] > this.player.y + 3) {
+        this.player.body.setVelocityY(80);
+      } else if (this.mouseTarget[1] < this.player.y - 3) {
+        this.player.body.setVelocityY(-80);
+      }
     }
 
     if (this.cursors.esc.isDown) {
-      this.visibleToggle(this.titleButton);
+      this.titleButton.visibleToggle();
       this.cursors.esc.isDown = false;
     }
 
@@ -482,15 +480,27 @@ export default class WorldScene extends Phaser.Scene {
     } else {
       this.boat.anims.stop();
 
-      if (this.cursors.left.isDown) {
+      if (
+        this.cursors.left.isDown ||
+        (this.mouseTarget && this.mouseTarget[0] < this.player.x - 3)
+      ) {
         this.player.anims.play('left', true);
         this.player.flipX = true;
-      } else if (this.cursors.right.isDown) {
+      } else if (
+        this.cursors.right.isDown ||
+        (this.mouseTarget && this.mouseTarget[0] > this.player.x + 3)
+      ) {
         this.player.anims.play('right', true);
         this.player.flipX = false;
-      } else if (this.cursors.up.isDown) {
+      } else if (
+        this.cursors.up.isDown ||
+        (this.mouseTarget && this.mouseTarget[1] < this.player.y - 3)
+      ) {
         this.player.anims.play('up', true);
-      } else if (this.cursors.down.isDown) {
+      } else if (
+        this.cursors.down.isDown ||
+        (this.mouseTarget && this.mouseTarget[1] > this.player.y + 3)
+      ) {
         this.player.anims.play('down', true);
       } else {
         this.player.anims.stop();

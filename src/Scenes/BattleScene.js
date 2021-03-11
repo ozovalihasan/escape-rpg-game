@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import config from '../Config/config';
 import Enemy from '../Objects/Enemy';
 import PlayerCharacter from '../Objects/PlayerCharacter';
+import OperationsAPI from '../Message/OperationsAPI';
 
 export default class BattleScene extends Phaser.Scene {
   constructor() {
@@ -11,7 +12,7 @@ export default class BattleScene extends Phaser.Scene {
   create() {
     this.cameras.main.setBackgroundColor('rgba(0, 200, 0, 0.5)');
     this.startBattle();
-
+    this.ui = this.scene.get('UI');
     this.sys.events.on('wake', this.startBattle, this);
   }
 
@@ -25,7 +26,7 @@ export default class BattleScene extends Phaser.Scene {
       1,
       'Warrior',
       [100, 110],
-      [this.world.player.damage, this.world.player.damage + 20],
+      [this.world.player.damage, this.world.player.damage + 20]
     );
 
     this.add.existing(warrior);
@@ -38,7 +39,7 @@ export default class BattleScene extends Phaser.Scene {
       null,
       this.world.player.enemy.name,
       this.world.player.enemy.hp,
-      this.world.player.enemy.damage,
+      this.world.player.enemy.damage
     );
     this.add.existing(dragonblue);
     this.heroes = [warrior];
@@ -48,60 +49,10 @@ export default class BattleScene extends Phaser.Scene {
     this.scene.run('UI');
   }
 
-  nextTurn() {
-    if (this.checkEndBattle()) {
-      this.endBattle();
-      return;
-    }
-    do {
-      this.index += 1;
-
-      if (this.index >= this.units.length) {
-        this.index = 0;
-      }
-    } while (!this.units[this.index].living);
-
-    if (this.units[this.index] instanceof PlayerCharacter) {
-      this.events.emit('PlayerSelect', this.index);
-    } else {
-      let r;
-      do {
-        r = Math.floor(Math.random() * this.heroes.length);
-      } while (!this.heroes[r].living);
-
-      this.units[this.index].attack(this.heroes[r]);
-
-      this.events.emit('UpdateHealthBars');
-
-      this.time.addEvent({
-        delay: 3000,
-        callback: this.nextTurn,
-        callbackScope: this,
-      });
-    }
-  }
-
-  checkEndBattle() {
-    let victory = true;
-
-    for (let i = 0; i < this.enemies.length; i += 1) {
-      if (this.enemies[i].living) victory = false;
-    }
-    let gameOver = true;
-
-    for (let i = 0; i < this.heroes.length; i += 1) {
-      if (this.heroes[i].living) gameOver = false;
-    }
-    if (gameOver) {
-      this.world.finishGame();
-    }
-    return victory || gameOver;
-  }
-
-  receivePlayerSelection(action, target) {
-    if (action === 'attack') {
-      this.units[this.index].attack(this.enemies[target]);
-    }
+  attackEnemy() {
+    // if (action === 'attack') {
+    this.units[0].attack(this.units[1]);
+    // }
     this.events.emit('UpdateHealthBars');
 
     this.time.addEvent({
@@ -109,6 +60,60 @@ export default class BattleScene extends Phaser.Scene {
       callback: this.nextTurn,
       callbackScope: this,
     });
+  }
+
+  nextTurn() {
+    if (this.checkEndBattle()) {
+      this.endBattle();
+      return;
+    }
+    this.units[1].attack(this.units[0]);
+
+    this.events.emit('UpdateHealthBars');
+
+    this.time.addEvent({
+      delay: 3000,
+      callback: () => {
+        this.checkEndBattle();
+        this.ui.attackButton.visibleToggle();
+      },
+    });
+  }
+
+  checkEndBattle() {
+    let victory = 'victory';
+
+    if (this.enemies[0].living) {
+      victory = false;
+    } else {
+      this.endBattle();
+      return;
+    }
+
+    let gameOver = 'game over';
+
+    for (let i = 0; i < this.heroes.length; i += 1) {
+      if (this.heroes[i].living) gameOver = false;
+    }
+
+    if (gameOver) {
+      this.events.emit('DeleteHealthBars');
+      this.ui.attackButton.destroy();
+      this.scene.sleep('UI');
+      this.finishGame();
+    }
+    return victory || gameOver;
+  }
+
+  finishGame() {
+    (async () => {
+      OperationsAPI.update(
+        this.sys.game.globals.username,
+        this.world.player.score
+      ).then(() => {
+        this.scene.start('Score');
+      });
+    })();
   }
 
   endBattle() {

@@ -9,13 +9,10 @@ export default class Unit extends Phaser.GameObjects.Sprite {
     this.maxHp = this.hp;
     this.damage = () => Phaser.Math.RND.between(damage[0], damage[1]);
     this.living = true;
-    this.menuItem = null;
     this.setScale(2);
   }
 
-  setMenuItem(item) {
-    this.menuItem = item;
-  }
+  
 
   attack(target) {
     if (target.living) {
@@ -32,10 +29,9 @@ export default class Unit extends Phaser.GameObjects.Sprite {
     this.hp -= damage;
     if (this.hp <= 0) {
       this.hp = 0;
-      this.menuItem.unitKilled();
+      
       this.living = false;
       this.visible = false;
-      this.menuItem = null;
-    }
+        }
   }
 }

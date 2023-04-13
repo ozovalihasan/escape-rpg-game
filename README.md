@@ -10,7 +10,7 @@
 
 ## Live Demo
 
-[Live Demo Link](https://escape-rpg-game.netlify.app/)
+[Live Demo Link](https://ozovalihasan.com/escape)
 
 ![screenshot](assets/screenshot.gif)
 
@@ -37,7 +37,7 @@ This project is part of the Technical Curriculum of the Full Stack Web Developme
 
 ### Usage
 
-- Click the [Live Demo Link](https://escape-rpg-game.netlify.app/) and enjoy the game.
+- Click the [Live Demo Link](https://ozovalihasan.com/escape) and enjoy the game.
 
 ## Setup
 
